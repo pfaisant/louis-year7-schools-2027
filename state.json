@@ -1,5 +1,9 @@
 {
-  "v": 1,
+  "comments": null,
+  "checklist": {},
+  "v": 2,
+  "updatedBy": "ui-restructure",
+  "updatedAt": "2026-07-21T11:20:08.5016153Z",
   "preferences": [
     "habs",
     "globe",
@@ -12,8 +16,5 @@
     "wcs",
     "dulwich",
     "cls"
-  ],
-  "checklist": {},
-  "updatedAt": "2026-07-21T12:30:00.000Z",
-  "updatedBy": "content-update"
+  ]
 }
