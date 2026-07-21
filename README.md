@@ -1,34 +1,38 @@
-# Louis — Year 7 school shortlist (Sept 2027)
+# Se1Schools2027 — Year 7 school shortlist (Sept 2027)
 
 Interactive comparison for home postcode **SE17 1BS**.
+
+## Sharing: public vs private repo
+
+| Hosting | Need public GitHub repo? |
+|--------|---------------------------|
+| **GitHub Pages (free, personal account)** | **Yes** — free Pages for user sites requires a public repo |
+| **GitHub Pages (Pro/Team)** | No — private Pages allowed on paid plans |
+| **Netlify / Cloudflare Pages free** | No — can deploy from a private repo; share the deploy URL |
+| **Multi-user ranking/checklist (JSONBlob)** | Independent of GitHub visibility — works as long as people open the same site URL |
+
+So: **for free GitHub Pages sharing, the repo must stay public.** If you want a private code repo, host the static site elsewhere (Netlify/Cloudflare) and share that URL instead.
+
+## Live site
+
+- Pages: https://pfaisant.github.io/Se1Schools2027/ (after rename) or previous Pages URL until DNS updates
+- Repo: https://github.com/pfaisant/Se1Schools2027
 
 ## Features
 
 - Preference ranking (▲▼) shared live with anyone who has the public link
-- Shared checklist (multi-user, no login)
-- Sortable main + alternatives tables
-- Commute **> 40 minutes** highlighted in scarlet
-- CdG international options (French / SI–BFI / British Section)
-- No girls’ schools on the alternatives list
-
-## Multi-user sync
-
-1. Browser loads `sync-config.json` → cloud blob id  
-2. Ranking + checklist read/write via JSONBlob (`PUT`/`GET`)  
-3. Everyone on the public URL polls every ~4s  
-4. GitHub Action `.github/workflows/sync-keepalive.yml` refreshes the blob every 8h and backs up to `state.json`
+- Shared checklist / plan ticks
+- Sortable tables, column tooltips, fees colour scale
+- Comments feed for feedback
+- Autosave (no save button)
 
 ## Local open
 
-Open `index.html` via a local static server (needed for `fetch` of `sync-config.json`):
+Use a static server (needed for `fetch` of `sync-config.json`):
 
 ```bash
 cd D:\louis-year7-2027
 npx --yes serve -p 5173
 ```
 
-## GitHub Pages
-
-After the repo is public and Pages is enabled (branch `main` / root):
-
-`https://<user>.github.io/<repo>/`
+Opening `index.html` via `file://` may break autosave/sync (browser security).

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Louis · Year 7 · SE17 1BS · 2027</title>
+  <title>Se1Schools2027</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
@@ -180,7 +180,7 @@
 </head>
 <body>
   <header class="topbar">
-    <h1>Louis · Y7 2027</h1>
+    <h1>Se1Schools2027</h1>
     <span class="meta">SE17 1BS</span>
     <nav class="nav" aria-label="Main">
       <button type="button" class="nav-btn active" data-tab="overview">Shortlist</button>
@@ -209,8 +209,8 @@
               <th class="sortable" data-key="open" data-type="str" data-tip="Published open days / tours for the autumn 2026 cycle (where known).">Open days <span class="tip">?</span><span class="sort-ind"></span></th>
               <th class="sortable" data-key="deadline" data-type="str" data-tip="Hard application or registration deadlines for 2027 entry.">Deadline <span class="tip">?</span><span class="sort-ind"></span></th>
               <th class="sortable" data-key="scholar" data-type="str" data-tip="Scholarships, prizes, or specialist place routes (entry or post-offer).">Scholarships <span class="tip">?</span><span class="sort-ind"></span></th>
-              <th class="sortable" data-key="quality" data-type="num" data-tip="Family estimate /100 of overall school quality for Louis: outcomes, reputation, co-curricular breadth. Not an Ofsted score.">Quality <span class="tip">?</span><span class="sort-ind"></span></th>
-              <th class="sortable" data-key="admit" data-type="num" data-tip="Rough chance /100 of an offer from SE17 1BS + Louis profile. Not a guarantee.">Admit <span class="tip">?</span><span class="sort-ind"></span></th>
+              <th class="sortable" data-key="quality" data-type="num" data-tip="Family estimate /100 of overall school quality: outcomes, reputation, co-curricular breadth. Not an Ofsted score.">Quality <span class="tip">?</span><span class="sort-ind"></span></th>
+              <th class="sortable" data-key="admit" data-type="num" data-tip="Rough chance /100 of an offer from SE17 1BS + applicant profile. Not a guarantee.">Admit <span class="tip">?</span><span class="sort-ind"></span></th>
               <th class="sortable" data-key="prep" data-type="num" data-tip="Prep load /100 = how much work the family needs before assessments. Low (~15–30): CAF / light banding only. Medium (~35–50): specialist or dossier. High (~85–95): full selective 11+ (papers, timed practice, often tutoring).">Prep <span class="tip">?</span><span class="sort-ind"></span></th>
               <th class="sortable" data-key="dist" data-type="num" data-tip="Straight-line distance from home postcode SE17 1BS (approx. miles).">Dist <span class="tip">?</span><span class="sort-ind"></span></th>
               <th class="sortable" data-key="commute" data-type="num" data-tip="Average door-to-door school-run minutes from SE17 1BS (walk/bus/tube blend). Over 40′ highlighted scarlet.">Commute <span class="tip">?</span><span class="sort-ind"></span></th>
@@ -240,7 +240,7 @@
               <th class="sortable" data-key="dist" data-type="num" data-tip="Miles from SE17 1BS.">Dist <span class="tip">?</span><span class="sort-ind"></span></th>
               <th class="sortable" data-key="commute" data-type="num" data-tip="Average minutes; &gt;40′ in scarlet.">Commute <span class="tip">?</span><span class="sort-ind"></span></th>
               <th class="sortable" data-key="fees" data-type="num" data-tip="Annual fees; colour scale free→expensive.">Fees /yr <span class="tip">?</span><span class="sort-ind"></span></th>
-              <th class="sortable" data-key="notes" data-type="str" data-tip="Fit notes for Louis (piano, football, EN/FR/DE).">Notes <span class="tip">?</span><span class="sort-ind"></span></th>
+              <th class="sortable" data-key="notes" data-type="str" data-tip="Optional fit notes for the applicant.">Notes <span class="tip">?</span><span class="sort-ind"></span></th>
             </tr>
           </thead>
           <tbody id="alt-body"></tbody>
@@ -367,7 +367,7 @@
       g = Math.round(140 * (1 - u2));
       b = Math.round(20 * (1 - u2));
     }
-    return '<span class="fees mono" style="color:rgb(' + r + "," + g + "," + b + ");background:rgba(" + r + "," + g + "," + b + ",0.12)">' + label + "</span>";
+    return '<span class="fees mono" style="color:rgb(' + r + ',' + g + ',' + b + ');background:rgba(' + r + ',' + g + ',' + b + ',0.12)">' + label + '</span>';
   }
 
   function normalizePrefs(prefs) {
