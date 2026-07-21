@@ -2,8 +2,8 @@
   "v": 3,
   "shortlist": [
     "habs",
-    "lycee",
     "cola",
+    "lycee",
     "oasis",
     "chestnut",
     "globe",
@@ -15,8 +15,8 @@
   ],
   "preferences": [
     "habs",
-    "lycee",
     "cola",
+    "lycee",
     "oasis",
     "chestnut",
     "globe",
@@ -36,6 +36,6 @@
       "clientId": "u-sw9m21z"
     }
   ],
-  "updatedAt": "2026-07-21T15:13:29.137Z",
-  "updatedBy": "comment-repair"
+  "updatedAt": "2026-07-21T16:58:21.597Z",
+  "updatedBy": "u-q4m30xs"
 }
