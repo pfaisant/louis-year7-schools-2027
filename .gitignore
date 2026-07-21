@@ -1,0 +1,5 @@
+blob-id.txt
+gh-*.log
+gh-*.err.log
+*.prev.html
+.DS_Store
