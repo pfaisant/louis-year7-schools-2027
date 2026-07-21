@@ -1,0 +1,113 @@
+name: Multi-user sync keep-alive
+
+# Keeps the shared JSONBlob alive and backs up ranking/checklist into state.json.
+# Free JSONBlob blobs expire ~24h without this job.
+
+on:
+  schedule:
+    - cron: "0 */8 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - "state.json"
+      - "sync-config.json"
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Refresh or recreate shared blob
+        id: sync
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const cfg = JSON.parse(fs.readFileSync('sync-config.json', 'utf8'));
+            let state;
+            try {
+              state = JSON.parse(fs.readFileSync('state.json', 'utf8'));
+            } catch {
+              state = {
+                v: 1,
+                preferences: ["habs","cola","harris","chestnut","lycee","wcs","dulwich","cls"],
+                checklist: {},
+                updatedAt: null,
+                updatedBy: "github-action"
+              };
+            }
+
+            const endpoint = cfg.endpoint || 'https://jsonblob.com/api/jsonBlob';
+            let blobId = cfg.blobId;
+            let ok = false;
+
+            // Try read existing remote (prefer fresher remote if present)
+            if (blobId) {
+              try {
+                const getRes = await fetch(`${endpoint}/${blobId}`, {
+                  headers: { Accept: 'application/json' }
+                });
+                if (getRes.ok) {
+                  const remote = await getRes.json();
+                  if (remote && remote.updatedAt && (!state.updatedAt || remote.updatedAt > state.updatedAt)) {
+                    state = remote;
+                  }
+                  // Touch / rewrite to refresh activity
+                  const putRes = await fetch(`${endpoint}/${blobId}`, {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Accept: 'application/json'
+                    },
+                    body: JSON.stringify(state)
+                  });
+                  ok = putRes.ok;
+                }
+              } catch (e) {
+                console.log('read/put failed', e);
+              }
+            }
+
+            if (!ok) {
+              const postRes = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json'
+                },
+                body: JSON.stringify(state)
+              });
+              if (!postRes.ok) {
+                throw new Error('Failed to create blob: ' + postRes.status);
+              }
+              // Location: /api/jsonBlob/<id>
+              const loc = postRes.headers.get('Location') || postRes.headers.get('location') || '';
+              const xid = postRes.headers.get('X-jsonblob-id') || postRes.headers.get('x-jsonblob-id');
+              blobId = xid || loc.split('/').filter(Boolean).pop();
+              if (!blobId) throw new Error('No blob id returned');
+              ok = true;
+              console.log('Created new blob', blobId);
+            }
+
+            fs.writeFileSync('sync-config.json', JSON.stringify({
+              blobId,
+              endpoint
+            }, null, 2) + '\n');
+            fs.writeFileSync('state.json', JSON.stringify(state, null, 2) + '\n');
+            core.setOutput('blobId', blobId);
+
+      - name: Commit backup if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sync-config.json state.json
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "chore: multi-user sync keep-alive $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi

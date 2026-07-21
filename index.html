@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Louis · Year 7 Shortlist SE17 1BS · Sept 2027</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:#121820; --soft:#3a4553; --mute:#6b7785; --line:#dde3ea;
+      --bg:#eef1f4; --panel:#fff; --navy:#153552; --navy2:#0f2740;
+      --teal:#0a7a7e; --teal-bg:#e5f5f5; --amber:#b45309; --amber-bg:#fef3e2;
+      --rose:#be123c; --rose-bg:#fce7ef; --scarlet:#ff0033; --scarlet-bg:#ffe5ea;
+      --violet:#5b21b6; --violet-bg:#f3eefc; --green:#15803d; --green-bg:#e8f7ee;
+      --side:220px; --max:1540px; --r:10px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:"DM Sans",system-ui,sans-serif;font-size:13.5px;line-height:1.4;color:var(--ink);background:var(--bg)}
+    a{color:var(--teal);text-underline-offset:2px} a:hover{color:var(--navy)}
+    .mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.92em}
+    .app{display:grid;grid-template-columns:var(--side) 1fr;min-height:100vh;max-width:var(--max);margin:0 auto}
+    .side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--navy2);color:#c8d6e4;padding:1rem .7rem 1.5rem;display:flex;flex-direction:column;gap:.3rem}
+    .side-brand{padding:.35rem .55rem .85rem;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:.45rem}
+    .side-brand h1{font-size:.95rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.25}
+    .side-brand p{font-size:.7rem;color:#8fa3b8;margin-top:.25rem;line-height:1.35}
+    .nav-btn{display:flex;align-items:center;gap:.45rem;width:100%;text-align:left;border:0;background:transparent;color:#b8c9d9;font:inherit;font-size:.78rem;font-weight:600;padding:.48rem .55rem;border-radius:8px;cursor:pointer}
+    .nav-btn:hover{background:rgba(255,255,255,.07);color:#fff}
+    .nav-btn.active{background:var(--teal);color:#fff}
+    .nav-btn .n{width:1.35rem;height:1.35rem;border-radius:5px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-size:.68rem;flex-shrink:0}
+    .nav-btn.active .n{background:rgba(0,0,0,.18)}
+    .nav-group{font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#6e8499;padding:.65rem .55rem .2rem}
+    .side-foot{margin-top:auto;padding:.7rem .55rem 0;border-top:1px solid rgba(255,255,255,.1);font-size:.68rem;color:#7a90a5;line-height:1.4}
+    .main{padding:.9rem 1.1rem 2rem;min-width:0}
+    .panel{display:none}.panel.active{display:block}
+    .strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem 1rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.7rem .9rem;margin-bottom:.75rem}
+    .strip h2{font-size:1.05rem;font-weight:700;color:var(--navy);letter-spacing:-.02em}
+    .strip .sub{font-size:.78rem;color:var(--mute)}
+    .chips{display:flex;flex-wrap:wrap;gap:.3rem}
+    .chip{font-size:.68rem;font-weight:600;padding:.22rem .5rem;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--soft)}
+    .chip.louis{background:var(--teal-bg);border-color:#b6dede;color:var(--teal)}
+    .chip.live{background:var(--green-bg);border-color:#b7e4c7;color:var(--green)}
+    .chip.live.warn{background:var(--amber-bg);border-color:#f5d9a8;color:var(--amber)}
+    .chip.live.err{background:var(--scarlet-bg);border-color:#ffb3c0;color:var(--scarlet)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:.55rem}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.75rem .85rem}
+    .card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:.35rem}
+    .card p,.card li{font-size:.78rem;color:var(--soft)}
+    .card ul{margin:.25rem 0 0 1rem}
+    .stat-n{font-family:"JetBrains Mono",monospace;font-size:1.35rem;font-weight:600;color:var(--navy);line-height:1}
+    .stat-l{font-size:.7rem;color:var(--mute);margin-top:.2rem}
+    .table-wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
+    table{width:100%;border-collapse:collapse;font-size:.74rem;min-width:1100px}
+    th{text-align:left;background:var(--navy);color:#e8f0f6;font-size:.63rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.48rem .5rem;white-space:nowrap;user-select:none}
+    th.sortable{cursor:pointer} th.sortable:hover{background:#1c4568}
+    th.sortable .sort-ind{opacity:.45;margin-left:.15rem;font-size:.7em}
+    th.sortable.asc .sort-ind,th.sortable.desc .sort-ind{opacity:1;color:#5eead4}
+    th.sortable.asc .sort-ind::after{content:" ▲"} th.sortable.desc .sort-ind::after{content:" ▼"}
+    th.sortable:not(.asc):not(.desc) .sort-ind::after{content:" ⇅"}
+    td{padding:.45rem .5rem;border-bottom:1px solid var(--line);vertical-align:top;color:var(--soft)}
+    tr:last-child td{border-bottom:0}
+    tbody tr:nth-child(even) td{background:#f8fafb}
+    tbody tr:hover td{background:#f0f7f7}
+    td.school{font-weight:700;color:var(--ink);min-width:9rem}
+    td.school .short{display:block;font-weight:500;font-size:.66rem;color:var(--mute)}
+    .badge{display:inline-block;font-size:.56rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.1rem .32rem;border-radius:4px;margin:0 .1rem .1rem 0}
+    .b-state{background:var(--teal-bg);color:var(--teal)} .b-ind{background:var(--violet-bg);color:var(--violet)}
+    .b-fr{background:var(--amber-bg);color:var(--amber)} .b-boys{background:#eef2f6;color:var(--soft)}
+    .b-warn{background:var(--rose-bg);color:var(--rose)} .b-ok{background:var(--green-bg);color:var(--green)}
+    .b-intl{background:#e0e7ff;color:#3730a3}
+    .score{display:inline-flex;align-items:baseline;gap:.12rem;font-family:"JetBrains Mono",monospace;font-weight:600;font-size:.86rem}
+    .score small{font-size:.62rem;color:var(--mute);font-weight:500}
+    .bar{height:5px;border-radius:3px;background:#e5e9ee;margin-top:.22rem;overflow:hidden;min-width:48px}
+    .bar>i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),#0d9488)}
+    .bar.lik>i{background:linear-gradient(90deg,#0369a1,#0ea5e9)}
+    .bar.prep>i{background:linear-gradient(90deg,var(--amber),#f59e0b)}
+    .bar.prep.high>i{background:linear-gradient(90deg,var(--rose),#f43f5e)}
+    .commute-long{color:var(--scarlet)!important;font-weight:700;background:var(--scarlet-bg);padding:.12rem .35rem;border-radius:4px;display:inline-block}
+    .pref-cell{display:flex;align-items:center;gap:.3rem;min-width:4.2rem}
+    .pref-num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.95rem;color:var(--navy);width:1.4rem;text-align:center}
+    .pref-arrows{display:flex;flex-direction:column;gap:1px}
+    .pref-arrows button{width:1.35rem;height:1rem;border:1px solid var(--line);background:#fff;border-radius:3px;cursor:pointer;color:var(--navy);font-size:.55rem;line-height:1;padding:0;display:grid;place-items:center}
+    .pref-arrows button:hover:not(:disabled){background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
+    .pref-arrows button:disabled{opacity:.3;cursor:not-allowed}
+    .btn{display:inline-flex;align-items:center;gap:.25rem;font-size:.7rem;font-weight:700;padding:.28rem .55rem;border-radius:6px;text-decoration:none;border:1px solid transparent;white-space:nowrap;cursor:pointer;font-family:inherit;background:var(--panel);color:var(--navy)}
+    .btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#086568;color:#fff}
+    .btn-ghost{border-color:var(--line)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+    .btn-warn{background:var(--rose);color:#fff}
+    .btn-row{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem}
+    .toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .65rem;margin-bottom:.55rem;font-size:.74rem;color:var(--mute)}
+    .toolbar strong{color:var(--soft)}
+    .save-status{font-size:.68rem;color:var(--green);min-height:1em}
+    .callout{border-radius:var(--r);padding:.65rem .8rem;margin-bottom:.7rem;border:1px solid transparent;font-size:.78rem;color:var(--soft)}
+    .callout strong{color:var(--ink)}
+    .callout.warn{background:var(--rose-bg);border-color:#f0b4c4}
+    .callout.info{background:var(--teal-bg);border-color:#b6dede}
+    .callout.tip{background:var(--amber-bg);border-color:#f5d9a8}
+    .callout.ok{background:var(--green-bg);border-color:#b7e4c7}
+    .section-label{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:.9rem 0 .4rem}
+    .school-head{display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:start;margin-bottom:.65rem}
+    .school-head h2{font-size:1.15rem;font-weight:700;color:var(--navy)}
+    .metrics{display:flex;gap:.45rem;flex-wrap:wrap}
+    .metric{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.4rem .55rem;min-width:72px;text-align:center}
+    .metric .v{font-family:"JetBrains Mono",monospace;font-weight:600;font-size:1rem;color:var(--navy)}
+    .metric .l{font-size:.58rem;color:var(--mute);font-weight:600;text-transform:uppercase}
+    .kv{display:grid;grid-template-columns:7.5rem 1fr;gap:.2rem .5rem;font-size:.78rem}
+    .kv dt{color:var(--mute);font-weight:600}.kv dd{color:var(--soft)}
+    .prep-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.7rem .8rem}
+    .prep-box h4{font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:.35rem}
+    .prep-box ol{margin-left:1.05rem;font-size:.76rem;color:var(--soft)}
+    .timeline{display:grid;gap:.4rem}
+    .tl{display:grid;grid-template-columns:7.5rem 1fr;gap:.55rem;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.5rem .7rem}
+    .tl .when{font-family:"JetBrains Mono",monospace;font-size:.7rem;font-weight:600;color:var(--teal)}
+    .tl.crit .when{color:var(--rose)}.tl.ind .when{color:var(--violet)}
+    .tl .what{font-size:.78rem;color:var(--soft)}.tl .what strong{color:var(--ink)}
+    .check{list-style:none;display:grid;gap:.3rem}
+    .check li{display:grid;grid-template-columns:1.1rem 1fr auto;gap:.5rem;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.45rem .65rem;font-size:.78rem;color:var(--soft)}
+    .check li.done{opacity:.65}.check li.done .check-label{text-decoration:line-through}
+    .check input{width:.95rem;height:.95rem;margin-top:.12rem;accent-color:var(--teal);cursor:pointer}
+    .check .due{font-family:"JetBrains Mono",monospace;font-size:.65rem;font-weight:600;color:var(--mute);white-space:nowrap}
+    .tests-cell{max-width:14rem;line-height:1.35;font-size:.72rem}
+    .note{font-size:.7rem;color:var(--mute);margin-top:.55rem;font-style:italic}
+    code{font-family:"JetBrains Mono",monospace;font-size:.72rem;background:#eef2f6;padding:.1rem .3rem;border-radius:4px}
+    @media(max-width:980px){
+      .app{grid-template-columns:1fr}
+      .side{position:relative;height:auto;flex-direction:row;flex-wrap:wrap}
+      .side-brand{width:100%}.side-foot{display:none}
+      .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+      .school-head,.tl{grid-template-columns:1fr}
+    }
+    @media print{.side{display:none}.app{grid-template-columns:1fr}.pref-arrows{display:none}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="side-brand">
+      <h1>Louis · Year 7 2027</h1>
+      <p>SE17 1BS · Multi-user live sync · Entry Sept 2027</p>
+    </div>
+    <div class="nav-group">Overview</div>
+    <button type="button" class="nav-btn active" data-tab="overview"><span class="n">01</span> Dashboard</button>
+    <button type="button" class="nav-btn" data-tab="compare"><span class="n">02</span> Compare all</button>
+    <button type="button" class="nav-btn" data-tab="timeline"><span class="n">03</span> Timeline</button>
+    <button type="button" class="nav-btn" data-tab="steps"><span class="n">04</span> Key steps</button>
+    <button type="button" class="nav-btn" data-tab="checklist"><span class="n">05</span> Checklist</button>
+    <button type="button" class="nav-btn" data-tab="share"><span class="n">06</span> Save &amp; share</button>
+    <div class="nav-group">Schools</div>
+    <button type="button" class="nav-btn" data-tab="habs"><span class="n">H</span> Habs Borough</button>
+    <button type="button" class="nav-btn" data-tab="wcs"><span class="n">W</span> Westminster City</button>
+    <button type="button" class="nav-btn" data-tab="cola"><span class="n">C</span> COLA Southwark</button>
+    <button type="button" class="nav-btn" data-tab="harris"><span class="n">Ha</span> Harris Boys ED</button>
+    <button type="button" class="nav-btn" data-tab="chestnut"><span class="n">Ch</span> Chestnut Grove</button>
+    <button type="button" class="nav-btn" data-tab="lycee"><span class="n">L</span> Lycée CdG</button>
+    <button type="button" class="nav-btn" data-tab="dulwich"><span class="n">D</span> Dulwich College</button>
+    <button type="button" class="nav-btn" data-tab="cls"><span class="n">CL</span> City of London</button>
+    <div class="side-foot">
+      Preference + checklist sync for everyone on this public link.<br>
+      Commute &gt; 40′ highlighted in <span style="color:#ff6b8a">scarlet</span>.
+    </div>
+  </aside>
+
+  <main class="main">
+    <section id="overview" class="panel active">
+      <div class="strip">
+        <div>
+          <h2>Dashboard · SE17 1BS</h2>
+          <p class="sub">Default sort = family preference · click headers to re-sort · arrows reorder for everyone</p>
+        </div>
+        <div class="chips">
+          <span class="chip louis">Louis: piano · football · EN · FR · DE</span>
+          <span class="chip live" id="sync-chip">Sync: connecting…</span>
+          <span class="chip" id="sync-meta">—</span>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <strong>Live multi-user:</strong> ranking and checklist are shared. Anyone with this page URL can edit; changes appear for others within a few seconds.
+        Commute times over <strong>40 minutes</strong> show in <span style="color:var(--scarlet);font-weight:700">scarlet</span>.
+      </div>
+
+      <div class="grid-4" style="margin-bottom:.65rem">
+        <div class="card"><div class="stat-n">8</div><div class="stat-l">Shortlisted</div></div>
+        <div class="card"><div class="stat-n" id="long-commute-count">—</div><div class="stat-l">Commute &gt; 40′</div></div>
+        <div class="card"><div class="stat-n">11 Sep</div><div class="stat-l">First deadline</div></div>
+        <div class="card"><div class="stat-n" id="checklist-progress">0/14</div><div class="stat-l">Checklist done</div></div>
+      </div>
+
+      <div class="toolbar">
+        <strong>Sort:</strong> <span id="sort-label">Preference order</span>
+        <button type="button" class="btn btn-ghost" id="btn-sort-pref">Preference</button>
+        <button type="button" class="btn btn-ghost" id="btn-sort-quality">Quality ↓</button>
+        <button type="button" class="btn btn-ghost" id="btn-reset-pref">Reset pref 1–8</button>
+        <button type="button" class="btn btn-ghost" id="btn-force-sync">Force sync</button>
+        <span class="save-status" id="pref-status"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table id="dash-table">
+          <thead>
+            <tr>
+              <th class="sortable asc" data-key="pref" data-type="num">Pref <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="name" data-type="str">School <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="tests" data-type="str">Admission / tests <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="quality" data-type="num">Quality <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="admit" data-type="num">Admit <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="prep" data-type="num">Prep <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="dist" data-type="num">Dist <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="commute" data-type="num">Commute <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="fees" data-type="num">Fees /yr <span class="sort-ind"></span></th>
+              <th>Apply</th>
+            </tr>
+          </thead>
+          <tbody id="dash-body"></tbody>
+        </table>
+      </div>
+      <p class="note">Commute = average door-to-door minutes from SE17 1BS. Quality / admit / prep are family estimates. Pref order is shared live.</p>
+
+      <div class="section-label">Alternatives worth considering</div>
+      <p class="sub" style="margin-bottom:.4rem;color:var(--mute);font-size:.78rem">Same score columns · sortable · no girls’ schools · scarlet if commute &gt; 40′</p>
+      <div class="toolbar">
+        <strong>Alt sort:</strong> <span id="alt-sort-label">Quality ↓</span>
+        <button type="button" class="btn btn-ghost" id="btn-alt-quality">Quality ↓</button>
+        <button type="button" class="btn btn-ghost" id="btn-alt-commute">Commute ↑</button>
+      </div>
+      <div class="table-wrap">
+        <table id="alt-table">
+          <thead>
+            <tr>
+              <th class="sortable desc" data-key="quality" data-type="num">Quality <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="name" data-type="str">School <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="why" data-type="str">Why consider <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="tests" data-type="str">Admission / tests <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="admit" data-type="num">Admit <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="prep" data-type="num">Prep <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="dist" data-type="num">Dist <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="commute" data-type="num">Commute <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="fees" data-type="num">Fees /yr <span class="sort-ind"></span></th>
+              <th class="sortable" data-key="notes" data-type="str">Louis notes <span class="sort-ind"></span></th>
+            </tr>
+          </thead>
+          <tbody id="alt-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="compare" class="panel">
+      <div class="strip"><div><h2>Full comparison</h2><p class="sub">Tests, scholarships, fees, links</p></div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>School</th><th>Admission / tests</th><th>Scholarships</th><th>Open days</th><th>Deadlines</th><th>Fees</th><th>Links</th></tr></thead>
+        <tbody>
+          <tr><td class="school"><span class="badge b-state">State</span><br>Habs Borough</td><td>CAF + LA banding</td><td>—</td><td>1 Oct eve; tours Sep/Oct</td><td>CAF 31 Oct</td><td>Free</td><td><a href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">eAdmissions</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><br>Westminster City</td><td>CAF + SIF · banding 14 Nov · Eng/Maths day · faith categories</td><td>—</td><td>Sep/Oct am + 6 Oct eve</td><td>31 Oct</td><td>Free</td><td><a href="https://www.wcsch.com/744/apply-year-7" target="_blank" rel="noopener">SIF</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-ok">No banding</span><br>COLA Southwark</td><td>CAF · optional IT aptitude (10%/24)</td><td>—</td><td>24 &amp; 28–30 Sep</td><td>31 Oct</td><td>Free</td><td><a href="https://docs.google.com/forms/d/e/1FAIpQLSdkmmPcoGAgp96NkwOeHwPzXqVSKGLEiArMbY81rJFYvLG40Q/viewform" target="_blank" rel="noopener">IT form</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><span class="badge b-ok">No banding</span><br>Harris Boys ED</td><td>CAF · distance only</td><td>Post-offer: Maths, Music, Future Linguist, CS, English, Geog, History, Science</td><td>Sep/Oct</td><td>31 Oct</td><td>Free</td><td><a href="https://www.harrisdulwichboys.org.uk/harris-scholarship-programmes" target="_blank" rel="noopener">Scholarships</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-warn">Early</span><br>Chestnut Grove</td><td>Wandsworth Test · MFL/Art specialist 19 Sep</td><td>Specialist places</td><td>TBC</td><td>Specialist form 11 Sep midday</td><td>Free</td><td><a href="https://forms.office.com/Pages/ResponsePage.aspx?id=2lpYW59c_ECe6BE-MtwiStZckjfs9pxIpLFkLm7_n9NUMEpHTFMwWDBWSjRaTldMTklUQlozVEIxWC4u" target="_blank" rel="noopener">Specialist form</a></td></tr>
+          <tr><td class="school"><span class="badge b-fr">French</span><span class="badge b-intl">Intl</span><br>Lycée CdG</td><td>FR dossier · SI–BFI · British Section separate</td><td>Bourses</td><td>Mar (passed)</td><td>From 7 Oct</td><td class="mono">£12.6k–£21.5k</td><td><a href="https://www.lyceefrancais.org.uk/en/admissions/" target="_blank" rel="noopener">Admissions</a> · <a href="https://www.lyceefrancais.org.uk/sinscrire/cursus-britannique/" target="_blank" rel="noopener">British</a></td></tr>
+          <tr><td class="school"><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><br>Dulwich College</td><td>11+ 4 Dec · interview</td><td>Academic · Music (to ⅓) · Sport · bursaries</td><td>10 Oct</td><td>Reg 2 Nov midday</td><td class="mono">£31,986</td><td><a href="https://www.dulwich.org.uk/admissions/year-7-entry" target="_blank" rel="noopener">Y7</a></td></tr>
+          <tr><td class="school"><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><br>City of London School</td><td>Online + writing 27 Nov · interview</td><td>£35 prizes · bursaries to 100%</td><td>22 &amp; 24 Sep</td><td>Reg 2 Nov</td><td class="mono">£29,545</td><td><a href="https://www.cityoflondonschool.org.uk/11-entry-registration-form/" target="_blank" rel="noopener">Register</a></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="timeline" class="panel">
+      <div class="strip"><div><h2>Timeline</h2></div></div>
+      <div class="timeline">
+        <div class="tl crit"><div class="when">11 Sep</div><div class="what"><strong>Chestnut specialist form</strong> midday · tests 19 Sep</div></div>
+        <div class="tl"><div class="when">Sep–Oct</div><div class="what">Open days wave</div></div>
+        <div class="tl"><div class="when">7 Oct</div><div class="what">Lycée 6ème registrations open</div></div>
+        <div class="tl crit"><div class="when">31 Oct</div><div class="what"><strong>CAF</strong> + WCS SIF</div></div>
+        <div class="tl ind"><div class="when">2 Nov</div><div class="what">Dulwich + CLS registration</div></div>
+        <div class="tl"><div class="when">14 Nov</div><div class="what">WCS banding 09:30</div></div>
+        <div class="tl ind"><div class="when">27 Nov</div><div class="what">CLS assessments</div></div>
+        <div class="tl ind"><div class="when">4 Dec</div><div class="what">Dulwich 11+</div></div>
+        <div class="tl"><div class="when">~Mar 2027</div><div class="what">Offers · Harris scholarships post-offer</div></div>
+      </div>
+    </section>
+
+    <section id="steps" class="panel">
+      <div class="strip"><div><h2>Key steps</h2></div></div>
+      <div class="grid-2">
+        <div class="card"><h3>1 · Rank on Dashboard</h3><p>Use ▲▼ so the whole family sees the same order (shared live).</p></div>
+        <div class="card"><h3>2 · Chestnut MFL first</h3><p>Form by 11 Sep midday · test 19 Sep.</p></div>
+        <div class="card"><h3>3 · Open days</h3><p>Trial real commute; scarlet rows are already &gt;40′ average.</p></div>
+        <div class="card"><h3>4 · Prep by route</h3><p>Low COLA/Harris · medium banding/Chestnut/CdG · high 11+.</p></div>
+        <div class="card"><h3>5 · CAF 31 Oct</h3><p>True preference order · WCS SIF · optional COLA IT.</p></div>
+        <div class="card"><h3>6 · Indep + CdG</h3><p>Reg DC/CLS by 2 Nov · Lycée FR / SI–BFI / British.</p></div>
+      </div>
+    </section>
+
+    <section id="checklist" class="panel">
+      <div class="strip">
+        <div><h2>Shared checklist</h2><p class="sub">Ticks sync for every visitor on this link</p></div>
+        <div class="btn-row" style="margin:0">
+          <button type="button" class="btn btn-ghost" id="btn-check-clear">Clear all</button>
+          <span class="save-status" id="check-status"></span>
+        </div>
+      </div>
+      <ul class="check" id="checklist-ul"></ul>
+    </section>
+
+    <section id="share" class="panel">
+      <div class="strip"><div><h2>Save &amp; share</h2><p class="sub">Public multi-user link · GitHub Pages</p></div></div>
+      <div class="callout ok">
+        <strong>Multi-user is on by default.</strong> Preference ranking and checklist are stored in a shared cloud blob (JSONBlob), with GitHub <code>state.json</code> backup via Actions keep-alive every 8 hours.
+        Anyone with the public site URL can edit — no login.
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>This deployment</h3>
+          <p>Project folder: <code>D:\louis-year7-2027</code></p>
+          <p style="margin-top:.35rem">Sync config: <code>sync-config.json</code> · backup: <code>state.json</code></p>
+          <p style="margin-top:.35rem">Status: <span id="share-sync-detail">—</span></p>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="btn-force-sync-2">Force pull/push sync</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>GitHub Pages (public free host)</h3>
+          <ul>
+            <li>Repo created as public from this folder</li>
+            <li>Pages serves <code>index.html</code></li>
+            <li>Action <code>sync-keepalive.yml</code> keeps shared store alive</li>
+          </ul>
+          <p style="margin-top:.4rem" id="repo-url-line">Repo URL: pending publish…</p>
+        </div>
+        <div class="card">
+          <h3>Export snapshot</h3>
+          <p>Download a JSON copy of ranking + checklist (backup).</p>
+          <div class="btn-row"><button type="button" class="btn btn-ghost" id="btn-export">Export JSON</button></div>
+        </div>
+        <div class="card">
+          <h3>How multi-user works</h3>
+          <ul>
+            <li>Page loads shared state from the cloud blob</li>
+            <li>Edits (▲▼ / checklist) PUT to the same blob</li>
+            <li>Poll every 4s for others’ changes</li>
+            <li>GitHub Action rewrites blob + backs up if free store expires</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- compact school tabs -->
+    <section id="habs" class="panel"><div class="school-head"><div><h2>Haberdashers' Borough Academy</h2><span class="badge b-state">State</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">0.8 mi · <strong>18′</strong></p></div><div class="metrics"><div class="metric"><div class="v">78</div><div class="l">Q</div></div><div class="metric"><div class="v">72</div><div class="l">Admit</div></div><div class="metric"><div class="v">25</div><div class="l">Prep</div></div></div></div>
+      <div class="card"><h3>Admission</h3><p>CAF + LA banding. Free.</p><div class="btn-row"><a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">eAdmissions</a></div></div></section>
+    <section id="wcs" class="panel"><div class="school-head"><div><h2>Westminster City School</h2><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">2.8 mi · <strong>30′</strong></p></div><div class="metrics"><div class="metric"><div class="v">76</div><div class="l">Q</div></div><div class="metric"><div class="v">45</div><div class="l">Admit</div></div><div class="metric"><div class="v">40</div><div class="l">Prep</div></div></div></div>
+      <div class="card"><h3>Admission</h3><p>CAF + SIF · banding 14 Nov · faith categories.</p><div class="btn-row"><a class="btn btn-primary" href="https://www.wcsch.com/744/apply-year-7" target="_blank" rel="noopener">SIF</a></div></div></section>
+    <section id="cola" class="panel"><div class="school-head"><div><h2>COLA Southwark</h2><span class="badge b-state">State</span><span class="badge b-ok">No banding</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">1.5 mi · <strong>20′</strong></p></div><div class="metrics"><div class="metric"><div class="v">74</div><div class="l">Q</div></div><div class="metric"><div class="v">76</div><div class="l">Admit</div></div><div class="metric"><div class="v">20</div><div class="l">Prep</div></div></div></div>
+      <div class="callout ok">No banding. Optional IT aptitude for 10% places.</div>
+      <div class="card"><div class="btn-row"><a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a><a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdkmmPcoGAgp96NkwOeHwPzXqVSKGLEiArMbY81rJFYvLG40Q/viewform" target="_blank" rel="noopener">IT form</a></div></div></section>
+    <section id="harris" class="panel"><div class="school-head"><div><h2>Harris Boys' Academy East Dulwich</h2><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><span class="badge b-ok">Outstanding</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">3.2 mi · <strong>35′</strong></p></div><div class="metrics"><div class="metric"><div class="v">88</div><div class="l">Q</div></div><div class="metric"><div class="v">58</div><div class="l">Admit</div></div><div class="metric"><div class="v">15</div><div class="l">Prep</div></div></div></div>
+      <div class="callout info">No banding — distance. Post-offer scholarships incl. Music + Future Linguist.</div>
+      <div class="card"><div class="btn-row"><a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a><a class="btn btn-ghost" href="https://www.harrisdulwichboys.org.uk/harris-scholarship-programmes" target="_blank" rel="noopener">Scholarships</a></div></div></section>
+    <section id="chestnut" class="panel"><div class="school-head"><div><h2>Chestnut Grove Academy</h2><span class="badge b-state">State</span><span class="badge b-warn">Early</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">5.5 mi · <span class="commute-long">45′</span></p></div><div class="metrics"><div class="metric"><div class="v">80</div><div class="l">Q</div></div><div class="metric"><div class="v">70</div><div class="l">Admit</div></div><div class="metric"><div class="v">45</div><div class="l">Prep</div></div></div></div>
+      <div class="callout warn">Specialist form <strong>11 Sep midday</strong> · tests 19 Sep. MFL strong for FR/DE.</div>
+      <div class="card"><div class="btn-row"><a class="btn btn-warn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=2lpYW59c_ECe6BE-MtwiStZckjfs9pxIpLFkLm7_n9NUMEpHTFMwWDBWSjRaTldMTklUQlozVEIxWC4u" target="_blank" rel="noopener">Specialist form</a></div></div></section>
+    <section id="lycee" class="panel"><div class="school-head"><div><h2>Lycée Français Charles de Gaulle</h2><span class="badge b-fr">French</span><span class="badge b-intl">Intl options</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">4.5 mi · <strong>40′</strong> (borderline)</p></div><div class="metrics"><div class="metric"><div class="v">86</div><div class="l">Q</div></div><div class="metric"><div class="v">68</div><div class="l">Admit</div></div><div class="metric"><div class="v">35</div><div class="l">Prep</div></div></div></div>
+      <div class="grid-3">
+        <div class="card"><h3>French 6ème</h3><p>Dossier, no exam. <span class="mono">£12,556.80/yr</span></p></div>
+        <div class="card"><h3>SI–BFI international</h3><p>International section. <span class="mono">£12,867.60/yr</span></p></div>
+        <div class="card"><h3>British Section</h3><p>GCSE/A-level track. <span class="mono">£21,542.40/yr</span></p></div>
+      </div>
+      <div class="btn-row" style="margin-top:.65rem">
+        <a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/en/admissions/" target="_blank" rel="noopener">Admissions</a>
+        <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/sinscrire/cursus-britannique/" target="_blank" rel="noopener">British curriculum</a>
+        <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/assets/Uploads/Tarifs-2026-2027.pdf" target="_blank" rel="noopener">Fees PDF</a>
+      </div>
+    </section>
+    <section id="dulwich" class="panel"><div class="school-head"><div><h2>Dulwich College</h2><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">3.8 mi · <strong>38′</strong></p></div><div class="metrics"><div class="metric"><div class="v">94</div><div class="l">Q</div></div><div class="metric"><div class="v">32</div><div class="l">Admit</div></div><div class="metric"><div class="v">88</div><div class="l">Prep</div></div></div></div>
+      <div class="card"><h3>Admission</h3><p>11+ 4 Dec · Music/Sport scholarships. <span class="mono">£31,986/yr</span></p><div class="btn-row"><a class="btn btn-primary" href="https://www.dulwich.org.uk/admissions/year-7-entry" target="_blank" rel="noopener">Y7 entry</a></div></div></section>
+    <section id="cls" class="panel"><div class="school-head"><div><h2>City of London School</h2><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">2.5 mi · <strong>30′</strong></p></div><div class="metrics"><div class="metric"><div class="v">96</div><div class="l">Q</div></div><div class="metric"><div class="v">28</div><div class="l">Admit</div></div><div class="metric"><div class="v">90</div><div class="l">Prep</div></div></div></div>
+      <div class="card"><h3>Admission</h3><p>Assessments 27 Nov · bursaries to 100%. <span class="mono">£29,545/yr</span></p><div class="btn-row"><a class="btn btn-primary" href="https://www.cityoflondonschool.org.uk/11-entry-registration-form/" target="_blank" rel="noopener">Register</a></div></div></section>
+  </main>
+</div>
+
+<script>
+(function () {
+  var CLIENT_ID = "u-" + Math.random().toString(36).slice(2, 9);
+  var DEFAULT_PREF = ["habs","cola","harris","chestnut","lycee","wcs","dulwich","cls"];
+  var prefOrder = DEFAULT_PREF.slice();
+  var checklist = {};
+  var remoteUpdatedAt = null;
+  var saveTimer = null;
+  var pollTimer = null;
+  var applyingRemote = false;
+  var syncCfg = { blobId: null, endpoint: "https://jsonblob.com/api/jsonBlob" };
+
+  var SCHOOLS = [
+    {id:"habs",name:"Haberdashers' Borough Academy",short:"SE1 · co-ed · banding",tests:"CAF + LA banding (fair bands)",quality:78,admit:72,prep:25,dist:0.8,commute:18,fees:0,feesLabel:"Free",
+      apply:'<a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a>',badges:"state"},
+    {id:"cola",name:"City of London Academy Southwark",short:"SE1 · no banding · optional IT",tests:"CAF only · optional IT aptitude (10%/24 places)",quality:74,admit:76,prep:20,dist:1.5,commute:20,fees:0,feesLabel:"Free",
+      apply:'<a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a> <a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdkmmPcoGAgp96NkwOeHwPzXqVSKGLEiArMbY81rJFYvLG40Q/viewform" target="_blank" rel="noopener">IT form</a>',badges:"state"},
+    {id:"harris",name:"Harris Boys' Academy East Dulwich",short:"SE22 · boys · distance · Outstanding",tests:"CAF · no test · distance (PAN 150)",quality:88,admit:58,prep:15,dist:3.2,commute:35,fees:0,feesLabel:"Free",
+      apply:'<a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a>',badges:"state boys"},
+    {id:"wcs",name:"Westminster City School",short:"SW1 · boys · faith + banding",tests:"CAF + SIF · banding 14 Nov · Eng/Maths day",quality:76,admit:45,prep:40,dist:2.8,commute:30,fees:0,feesLabel:"Free",
+      apply:'<a class="btn btn-primary" href="https://www.wcsch.com/744/apply-year-7" target="_blank" rel="noopener">SIF</a>',badges:"state boys"},
+    {id:"chestnut",name:"Chestnut Grove Academy",short:"SW12 · Wandsworth + MFL/Art",tests:"Wandsworth Test · MFL/Art specialist 19 Sep",quality:80,admit:70,prep:45,dist:5.5,commute:45,fees:0,feesLabel:"Free",
+      apply:'<a class="btn btn-warn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=2lpYW59c_ECe6BE-MtwiStZckjfs9pxIpLFkLm7_n9NUMEpHTFMwWDBWSjRaTldMTklUQlozVEIxWC4u" target="_blank" rel="noopener">Specialist</a>',badges:"state warn"},
+    {id:"lycee",name:"Lycée Français Charles de Gaulle",short:"SW7 · FR / SI–BFI / British Section",tests:"Dossier (FR) · SI language assess · British Section separate",quality:86,admit:68,prep:35,dist:4.5,commute:40,fees:12557,feesLabel:"£12.6k–£21.5k",
+      apply:'<a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/en/admissions/" target="_blank" rel="noopener">Admissions</a>',badges:"fr intl"},
+    {id:"dulwich",name:"Dulwich College",short:"SE21 · boys · selective 11+",tests:"11+ Maths/Eng/Reasoning 4 Dec · interview",quality:94,admit:32,prep:88,dist:3.8,commute:38,fees:31986,feesLabel:"£31,986",
+      apply:'<a class="btn btn-primary" href="https://www.dulwich.org.uk/admissions/year-7-entry" target="_blank" rel="noopener">Register</a>',badges:"ind boys"},
+    {id:"cls",name:"City of London School",short:"EC4 · boys · selective 11+",tests:"Online 105′ + writing 30′ on 27 Nov · interview",quality:96,admit:28,prep:90,dist:2.5,commute:30,fees:29545,feesLabel:"£29,545",
+      apply:'<a class="btn btn-primary" href="https://www.cityoflondonschool.org.uk/11-entry-registration-form/" target="_blank" rel="noopener">Register</a>',badges:"ind boys"}
+  ];
+
+  /* Alternatives: co-ed or boys only — no girls' schools */
+  var ALTS = [
+    {id:"charter",name:"The Charter School East Dulwich",short:"SE22 · co-ed academy",why:"Strong local comprehensive; Harris ED peer",tests:"CAF · no 11+",quality:82,admit:55,prep:15,dist:3.0,commute:32,fees:0,feesLabel:"Free",notes:"Proximity backup if Harris distance tight"},
+    {id:"globe",name:"Ark Globe Academy",short:"SE1 · co-ed all-through",why:"Very close to SE17; all-through option",tests:"CAF · check current banding",quality:72,admit:70,prep:20,dist:1.0,commute:15,fees:0,feesLabel:"Free",notes:"Commute win if Habs/COLA risk"},
+    {id:"alleyns",name:"Alleyn's School",short:"SE22 · co-ed independent",why:"Dulwich triangle co-ed alternative to DC/CLS",tests:"11+ exams · scholarships",quality:93,admit:30,prep:88,dist:3.5,commute:35,fees:30000,feesLabel:"~£30k+",notes:"Similar prep; co-ed culture"},
+    {id:"whitgift",name:"Whitgift School",short:"Croydon · boys independent",why:"Strong sport/music scholarships",tests:"11+ · scholarships",quality:90,admit:28,prep:85,dist:8.5,commute:55,fees:28000,feesLabel:"~£28–32k",notes:"Football/piano angle; long commute"},
+    {id:"trinity",name:"Trinity School Croydon",short:"Croydon · boys independent",why:"Academic boys indep with sport",tests:"11+ · scholarships",quality:89,admit:30,prep:85,dist:8.0,commute:52,fees:27000,feesLabel:"~£27–30k",notes:"Stretch option; long commute"},
+    {id:"ejm",name:"École Jeannine Manuel London",short:"Bilingual FR/EN",why:"Bilingual alternative to CdG",tests:"Assessment · dossier",quality:88,admit:40,prep:50,dist:5.0,commute:42,fees:25000,feesLabel:"~£20–30k",notes:"Bilingual without full AEFE French track"},
+    {id:"wil",name:"Lycée International Winston Churchill",short:"Wembley · AEFE",why:"Other London AEFE option",tests:"Dossier / track tests",quality:84,admit:50,prep:40,dist:10.0,commute:60,fees:15000,feesLabel:"See fees",notes:"Longer than South Ken CdG"},
+    {id:"wilsons",name:"Wilson's School (Sutton)",short:"Boys grammar",why:"Selective state stretch",tests:"SET / selective 11+",quality:95,admit:18,prep:92,dist:9.5,commute:58,fees:0,feesLabel:"Free",notes:"High prep; long from SE17"},
+    {id:"kcs",name:"King's College School Wimbledon",short:"Boys independent",why:"Top-tier independent stretch",tests:"11+ highly selective",quality:97,admit:15,prep:95,dist:7.5,commute:52,fees:32000,feesLabel:"~£32k+",notes:"Only if full 11+ circuit"}
+  ];
+
+  var CHECK_ITEMS = [
+    {id:"c1",label:"Chestnut specialist form (MFL ± Art)",due:"11 Sep midday"},
+    {id:"c2",label:"Chestnut specialist test day",due:"19 Sep"},
+    {id:"c3",label:"Book open days: CLS, Harris, COLA, Habs, WCS, Dulwich",due:"Sep–Oct"},
+    {id:"c4",label:"Optional COLA IT aptitude form",due:"When open"},
+    {id:"c5",label:"Register Wandsworth Year 6 Test",due:"Summer portal"},
+    {id:"c6",label:"Assemble Lycée dossier; choose FR / SI–BFI / British",due:"Before 7 Oct"},
+    {id:"c7",label:"Open Lycée 6ème registration",due:"From 7 Oct"},
+    {id:"c8",label:"Submit CAF preference order",due:"31 Oct hard"},
+    {id:"c9",label:"Westminster City SIF (+ banding booking)",due:"By 31 Oct"},
+    {id:"c10",label:"Register Dulwich College 11+",due:"2 Nov midday"},
+    {id:"c11",label:"Register City of London School 11+",due:"2 Nov"},
+    {id:"c12",label:"WCS banding test",due:"14 Nov 09:30"},
+    {id:"c13",label:"CLS assessments",due:"27 Nov"},
+    {id:"c14",label:"Dulwich 11+ exams",due:"4 Dec"}
+  ];
+
+  var sortState = { key: "pref", dir: "asc", type: "num" };
+  var altSort = { key: "quality", dir: "desc", type: "num" };
+
+  function setSyncUI(kind, text, meta) {
+    var chip = document.getElementById("sync-chip");
+    chip.className = "chip live" + (kind === "ok" ? "" : kind === "warn" ? " warn" : kind === "err" ? " err" : "");
+    chip.textContent = text;
+    document.getElementById("sync-meta").textContent = meta || "";
+    document.getElementById("share-sync-detail").textContent = text + (meta ? " · " + meta : "");
+  }
+
+  function commuteHtml(mins) {
+    var label = mins + "′";
+    if (mins > 40) return '<span class="commute-long mono">' + label + "</span>";
+    return '<span class="mono"><strong>' + label + "</strong></span>";
+  }
+
+  function scoreCell(val, barClass, highPrep) {
+    var h = highPrep && val >= 70 ? " high" : "";
+    return '<span class="score">' + val + '<small>/100</small></span><div class="bar ' + (barClass||"") + h + '"><i style="width:' + val + '%"></i></div>';
+  }
+
+  function badgeHtml(s) {
+    var h = "";
+    if ((s.badges||"").indexOf("state")>=0) h += '<span class="badge b-state">State</span>';
+    if ((s.badges||"").indexOf("ind")>=0) h += '<span class="badge b-ind">Indep</span>';
+    if ((s.badges||"").indexOf("fr")>=0) h += '<span class="badge b-fr">French</span>';
+    if ((s.badges||"").indexOf("intl")>=0) h += '<span class="badge b-intl">Intl</span>';
+    if ((s.badges||"").indexOf("boys")>=0) h += '<span class="badge b-boys">Boys</span>';
+    if ((s.badges||"").indexOf("warn")>=0) h += '<span class="badge b-warn">Early</span>';
+    return h;
+  }
+
+  function prefIndex(id) { var i = prefOrder.indexOf(id); return i < 0 ? 99 : i; }
+
+  function getSorted(list, state, prefAware) {
+    var rows = list.slice();
+    var key = state.key, dir = state.dir === "asc" ? 1 : -1;
+    rows.sort(function (a, b) {
+      var av, bv;
+      if (key === "pref") { av = prefIndex(a.id); bv = prefIndex(b.id); }
+      else if (typeof a[key] === "string") { av = (a[key]||"").toLowerCase(); bv = (b[key]||"").toLowerCase(); }
+      else { av = a[key]; bv = b[key]; }
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return prefAware ? prefIndex(a.id) - prefIndex(b.id) : 0;
+    });
+    return rows;
+  }
+
+  function renderDash() {
+    var tbody = document.getElementById("dash-body");
+    var rows = getSorted(SCHOOLS, sortState, true);
+    var longN = SCHOOLS.filter(function (s) { return s.commute > 40; }).length;
+    document.getElementById("long-commute-count").textContent = String(longN);
+    tbody.innerHTML = rows.map(function (s) {
+      var p = prefIndex(s.id) + 1;
+      return "<tr data-id=\"" + s.id + "\">" +
+        "<td><div class=\"pref-cell\"><span class=\"pref-num\">" + p + "</span><div class=\"pref-arrows\">" +
+        "<button type=\"button\" data-move=\"" + s.id + "\" data-delta=\"-1\"" + (p===1?" disabled":"") + ">▲</button>" +
+        "<button type=\"button\" data-move=\"" + s.id + "\" data-delta=\"1\"" + (p===prefOrder.length?" disabled":"") + ">▼</button>" +
+        "</div></div></td>" +
+        "<td class=\"school\">" + badgeHtml(s) + "<br>" + s.name + "<span class=\"short\">" + s.short + "</span></td>" +
+        "<td class=\"tests-cell\">" + s.tests + "</td>" +
+        "<td>" + scoreCell(s.quality,"") + "</td>" +
+        "<td>" + scoreCell(s.admit,"lik") + "</td>" +
+        "<td>" + scoreCell(s.prep,"prep",true) + "</td>" +
+        "<td class=\"mono\">" + s.dist + " mi</td>" +
+        "<td>" + commuteHtml(s.commute) + "</td>" +
+        "<td class=\"mono\">" + s.feesLabel + "</td>" +
+        "<td>" + s.apply + "</td></tr>";
+    }).join("");
+    tbody.querySelectorAll("[data-move]").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        movePref(btn.getAttribute("data-move"), parseInt(btn.getAttribute("data-delta"), 10));
+      });
+    });
+    updateSortHeaders("#dash-table", sortState);
+  }
+
+  function renderAlts() {
+    var tbody = document.getElementById("alt-body");
+    var rows = getSorted(ALTS, altSort, false);
+    tbody.innerHTML = rows.map(function (s) {
+      return "<tr>" +
+        "<td>" + scoreCell(s.quality,"") + "</td>" +
+        "<td class=\"school\">" + s.name + "<span class=\"short\">" + s.short + "</span></td>" +
+        "<td>" + s.why + "</td>" +
+        "<td class=\"tests-cell\">" + s.tests + "</td>" +
+        "<td>" + scoreCell(s.admit,"lik") + "</td>" +
+        "<td>" + scoreCell(s.prep,"prep",true) + "</td>" +
+        "<td class=\"mono\">" + s.dist + " mi</td>" +
+        "<td>" + commuteHtml(s.commute) + "</td>" +
+        "<td class=\"mono\">" + s.feesLabel + "</td>" +
+        "<td>" + s.notes + "</td></tr>";
+    }).join("");
+    updateSortHeaders("#alt-table", altSort);
+  }
+
+  function updateSortHeaders(tableSel, state) {
+    document.querySelectorAll(tableSel + " th.sortable").forEach(function (th) {
+      th.classList.remove("asc","desc");
+      if (th.getAttribute("data-key") === state.key) th.classList.add(state.dir);
+    });
+  }
+
+  function setSort(which, key, type, forceDir) {
+    var state = which === "alt" ? altSort : sortState;
+    if (forceDir) { state.key = key; state.dir = forceDir; state.type = type; }
+    else if (state.key === key) state.dir = state.dir === "asc" ? "desc" : "asc";
+    else {
+      state.key = key; state.type = type;
+      state.dir = (key === "pref" || key === "name" || key === "tests" || key === "why" || key === "notes" || key === "commute" || key === "dist") ? "asc" : "desc";
+      if (key === "commute" || key === "dist" || key === "prep" || key === "fees") state.dir = "asc";
+      if (key === "quality" || key === "admit") state.dir = "desc";
+    }
+    var label = key + " · " + state.dir;
+    if (which === "alt") {
+      document.getElementById("alt-sort-label").textContent = label;
+      renderAlts();
+    } else {
+      document.getElementById("sort-label").textContent = key === "pref" ? "Preference order" : label;
+      renderDash();
+    }
+  }
+
+  function movePref(id, delta) {
+    var i = prefOrder.indexOf(id);
+    if (i < 0) return;
+    var j = i + delta;
+    if (j < 0 || j >= prefOrder.length) return;
+    var t = prefOrder[i]; prefOrder[i] = prefOrder[j]; prefOrder[j] = t;
+    sortState = { key: "pref", dir: "asc", type: "num" };
+    document.getElementById("sort-label").textContent = "Preference order";
+    renderDash();
+    scheduleSave();
+  }
+
+  function renderChecklist() {
+    var ul = document.getElementById("checklist-ul");
+    ul.innerHTML = CHECK_ITEMS.map(function (item) {
+      var checked = !!checklist[item.id];
+      return "<li class=\"" + (checked?"done":"") + "\">" +
+        "<input type=\"checkbox\" data-check=\"" + item.id + "\"" + (checked?" checked":"") + " />" +
+        "<span class=\"check-label\">" + item.label + "</span>" +
+        "<span class=\"due\">" + item.due + "</span></li>";
+    }).join("");
+    ul.querySelectorAll("[data-check]").forEach(function (cb) {
+      cb.addEventListener("change", function () {
+        checklist[cb.getAttribute("data-check")] = cb.checked;
+        cb.closest("li").classList.toggle("done", cb.checked);
+        updateCheckProgress();
+        scheduleSave();
+      });
+    });
+    updateCheckProgress();
+  }
+
+  function updateCheckProgress() {
+    var n = CHECK_ITEMS.filter(function (i) { return checklist[i.id]; }).length;
+    document.getElementById("checklist-progress").textContent = n + "/" + CHECK_ITEMS.length;
+  }
+
+  function currentState() {
+    return {
+      v: 1,
+      preferences: prefOrder.slice(),
+      checklist: Object.assign({}, checklist),
+      updatedAt: new Date().toISOString(),
+      updatedBy: CLIENT_ID
+    };
+  }
+
+  function applyState(state, fromRemote) {
+    if (!state) return;
+    applyingRemote = true;
+    if (Array.isArray(state.preferences) && state.preferences.length === DEFAULT_PREF.length) {
+      prefOrder = state.preferences.slice();
+    }
+    if (state.checklist && typeof state.checklist === "object") {
+      checklist = Object.assign({}, state.checklist);
+    }
+    if (state.updatedAt) remoteUpdatedAt = state.updatedAt;
+    renderDash();
+    renderChecklist();
+    applyingRemote = false;
+    if (fromRemote) {
+      var when = state.updatedAt ? new Date(state.updatedAt).toLocaleString() : "—";
+      setSyncUI("ok", "Sync: live", "Last change " + when + (state.updatedBy === CLIENT_ID ? " (you)" : " (shared)"));
+    }
+  }
+
+  async function loadConfig() {
+    try {
+      var res = await fetch("sync-config.json?t=" + Date.now(), { cache: "no-store" });
+      if (res.ok) syncCfg = await res.json();
+    } catch (e) {}
+    if (!syncCfg.endpoint) syncCfg.endpoint = "https://jsonblob.com/api/jsonBlob";
+  }
+
+  async function pullRemote() {
+    await loadConfig();
+    // Prefer live blob; fall back to state.json
+    if (syncCfg.blobId) {
+      try {
+        var res = await fetch(syncCfg.endpoint + "/" + syncCfg.blobId + "?t=" + Date.now(), {
+          cache: "no-store",
+          headers: { Accept: "application/json" }
+        });
+        if (res.ok) {
+          var data = await res.json();
+          if (!remoteUpdatedAt || (data.updatedAt && data.updatedAt >= remoteUpdatedAt) || data.updatedBy !== CLIENT_ID) {
+            if (!remoteUpdatedAt || data.updatedAt !== remoteUpdatedAt || data.updatedBy !== CLIENT_ID) {
+              // Only apply if remote is newer or different
+              if (!remoteUpdatedAt || (data.updatedAt && data.updatedAt > remoteUpdatedAt)) {
+                applyState(data, true);
+              } else if (data.updatedAt === remoteUpdatedAt) {
+                setSyncUI("ok", "Sync: live", "Up to date");
+              }
+            }
+          }
+          return true;
+        }
+      } catch (e) {
+        setSyncUI("warn", "Sync: blob unreachable", e.message);
+      }
+    }
+    try {
+      var res2 = await fetch("state.json?t=" + Date.now(), { cache: "no-store" });
+      if (res2.ok) {
+        var backup = await res2.json();
+        if (!remoteUpdatedAt || (backup.updatedAt && backup.updatedAt > remoteUpdatedAt)) {
+          applyState(backup, true);
+          setSyncUI("warn", "Sync: using GitHub backup", "Blob offline — edits may not multi-user until repair");
+        }
+        return true;
+      }
+    } catch (e2) {}
+    setSyncUI("err", "Sync: offline", "Local only until cloud available");
+    return false;
+  }
+
+  async function pushRemote() {
+    if (applyingRemote) return;
+    var state = currentState();
+    await loadConfig();
+    if (!syncCfg.blobId) {
+      setSyncUI("err", "Sync: no blob id", "Check sync-config.json");
+      return;
+    }
+    try {
+      var res = await fetch(syncCfg.endpoint + "/" + syncCfg.blobId, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(state)
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      remoteUpdatedAt = state.updatedAt;
+      setSyncUI("ok", "Sync: saved", "Shared with everyone · " + new Date(state.updatedAt).toLocaleTimeString());
+      var st = document.getElementById("pref-status");
+      st.textContent = "Saved for all users";
+      setTimeout(function () { if (st.textContent === "Saved for all users") st.textContent = ""; }, 1500);
+    } catch (e) {
+      setSyncUI("err", "Sync: save failed", e.message);
+    }
+  }
+
+  function scheduleSave() {
+    if (applyingRemote) return;
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(pushRemote, 350);
+  }
+
+  function exportData() {
+    var blob = new Blob([JSON.stringify(currentState(), null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "louis-year7-shared-state.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function showTab(id) {
+    document.querySelectorAll(".panel").forEach(function (p) { p.classList.toggle("active", p.id === id); });
+    document.querySelectorAll(".nav-btn").forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-tab") === id); });
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+    window.scrollTo(0, 0);
+  }
+
+  document.querySelectorAll(".nav-btn").forEach(function (b) {
+    b.addEventListener("click", function () { showTab(b.getAttribute("data-tab")); });
+  });
+  document.querySelectorAll("#dash-table th.sortable").forEach(function (th) {
+    th.addEventListener("click", function () { setSort("dash", th.getAttribute("data-key"), th.getAttribute("data-type")); });
+  });
+  document.querySelectorAll("#alt-table th.sortable").forEach(function (th) {
+    th.addEventListener("click", function () { setSort("alt", th.getAttribute("data-key"), th.getAttribute("data-type")); });
+  });
+  document.getElementById("btn-sort-pref").addEventListener("click", function () { setSort("dash", "pref", "num", "asc"); });
+  document.getElementById("btn-sort-quality").addEventListener("click", function () { setSort("dash", "quality", "num", "desc"); });
+  document.getElementById("btn-alt-quality").addEventListener("click", function () { setSort("alt", "quality", "num", "desc"); });
+  document.getElementById("btn-alt-commute").addEventListener("click", function () { setSort("alt", "commute", "num", "asc"); });
+  document.getElementById("btn-reset-pref").addEventListener("click", function () {
+    if (confirm("Reset shared preference order to default for everyone?")) {
+      prefOrder = DEFAULT_PREF.slice();
+      sortState = { key: "pref", dir: "asc", type: "num" };
+      renderDash();
+      scheduleSave();
+    }
+  });
+  document.getElementById("btn-check-clear").addEventListener("click", function () {
+    if (confirm("Clear all checklist ticks for everyone?")) {
+      checklist = {};
+      renderChecklist();
+      scheduleSave();
+    }
+  });
+  function forceSync() { pullRemote().then(function () { return pushRemote(); }); }
+  document.getElementById("btn-force-sync").addEventListener("click", forceSync);
+  document.getElementById("btn-force-sync-2").addEventListener("click", forceSync);
+  document.getElementById("btn-export").addEventListener("click", exportData);
+
+  // Initial render + multi-user
+  renderDash();
+  renderAlts();
+  renderChecklist();
+  pullRemote().then(function () {
+    pollTimer = setInterval(function () { pullRemote(); }, 4000);
+  });
+
+  var hash = (location.hash || "").replace("#", "");
+  if (hash && document.getElementById(hash)) showTab(hash);
+})();
+</script>
+</body>
+</html>
