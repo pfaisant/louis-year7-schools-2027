@@ -884,13 +884,46 @@
     return order;
   }
 
+  /** Always an array. Fixes PowerShell/JSON single-item objects and bad remote shapes. */
+  function normalizeComments(c) {
+    if (!c) return [];
+    if (Array.isArray(c)) {
+      return c.filter(function (x) { return x && (x.text || x.id); }).map(function (x) {
+        return {
+          id: x.id || ("cm-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6)),
+          text: String(x.text || ""),
+          name: String(x.name || ""),
+          at: x.at || new Date().toISOString(),
+          clientId: x.clientId || ""
+        };
+      });
+    }
+    // Single comment object mistakenly stored as object not array
+    if (typeof c === "object" && (c.text || c.id)) {
+      return normalizeComments([c]);
+    }
+    return [];
+  }
+
+  /** Union by id; never drop a comment that exists on either side. */
+  function mergeComments(a, b) {
+    var map = {};
+    normalizeComments(a).concat(normalizeComments(b)).forEach(function (c) {
+      if (!c.id) return;
+      if (!map[c.id] || (c.at && map[c.id].at && c.at > map[c.id].at)) map[c.id] = c;
+      else if (!map[c.id]) map[c.id] = c;
+    });
+    return Object.keys(map).map(function (k) { return map[k]; })
+      .sort(function (x, y) { return (x.at || "").localeCompare(y.at || ""); });
+  }
+
   function currentState() {
     return {
       v: 3,
       shortlist: shortlist.slice(),
       preferences: shortlist.slice(), // backward compat
       checklist: Object.assign({}, checklist),
-      comments: comments.slice(),
+      comments: normalizeComments(comments), // always array in storage
       updatedAt: new Date().toISOString(),
       updatedBy: CLIENT_ID
     };
@@ -901,8 +934,11 @@
     applyingRemote = true;
     var prefs = state.shortlist || state.preferences;
     if (Array.isArray(prefs)) shortlist = normalizeShortlist(prefs);
-    if (state.checklist && typeof state.checklist === "object") checklist = Object.assign({}, state.checklist);
-    if (Array.isArray(state.comments)) comments = state.comments.slice();
+    if (state.checklist && typeof state.checklist === "object" && !Array.isArray(state.checklist)) {
+      checklist = Object.assign({}, state.checklist);
+    }
+    // Merge remote comments into local so we never lose either side
+    comments = mergeComments(comments, state.comments);
     if (state.updatedAt) remoteUpdatedAt = state.updatedAt;
     renderDash();
     renderComments();
@@ -957,6 +993,17 @@
     setSave("", "Saving…");
     await loadConfig();
     if (!syncCfg.blobId) { setSave("err", "No sync config"); return; }
+    // Re-read remote first and merge comments so a concurrent update cannot wipe them
+    try {
+      var getRes = await fetch(syncCfg.endpoint + "/" + syncCfg.blobId + "?t=" + Date.now(), {
+        cache: "no-store", headers: { Accept: "application/json" }
+      });
+      if (getRes.ok) {
+        var remote = await getRes.json();
+        comments = mergeComments(comments, remote.comments);
+      }
+    } catch (e) { /* proceed with local */ }
+
     var state = currentState();
     try {
       var res = await fetch(syncCfg.endpoint + "/" + syncCfg.blobId, {
@@ -966,6 +1013,8 @@
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
       remoteUpdatedAt = state.updatedAt;
+      comments = normalizeComments(state.comments);
+      renderComments();
       setSave("ok", "Last change " + new Date(state.updatedAt).toLocaleString() + " (you)");
     } catch (e) {
       setSave("err", "Save failed");

@@ -28,24 +28,56 @@ jobs:
           script: |
             const fs = require('fs');
             const cfg = JSON.parse(fs.readFileSync('sync-config.json', 'utf8'));
+            function normalizeComments(c) {
+              if (!c) return [];
+              if (Array.isArray(c)) return c.filter(x => x && (x.text || x.id));
+              if (typeof c === 'object' && (c.text || c.id)) return [c];
+              return [];
+            }
+            function mergeComments(a, b) {
+              const map = {};
+              for (const c of normalizeComments(a).concat(normalizeComments(b))) {
+                if (!c.id) continue;
+                if (!map[c.id] || (c.at && map[c.id].at && c.at > map[c.id].at)) map[c.id] = c;
+                else if (!map[c.id]) map[c.id] = c;
+              }
+              return Object.values(map);
+            }
+            function mergeState(local, remote) {
+              if (!remote) return local;
+              // Prefer newer overall fields, but ALWAYS union comments
+              const useRemote = remote.updatedAt && (!local.updatedAt || remote.updatedAt > local.updatedAt);
+              const base = useRemote ? { ...local, ...remote } : { ...remote, ...local };
+              base.comments = mergeComments(local.comments, remote.comments);
+              if (!Array.isArray(base.shortlist) && Array.isArray(base.preferences)) {
+                base.shortlist = base.preferences;
+              }
+              if (!base.checklist || typeof base.checklist !== 'object') base.checklist = {};
+              base.v = Math.max(local.v || 0, remote.v || 0, 3);
+              return base;
+            }
+
             let state;
             try {
               state = JSON.parse(fs.readFileSync('state.json', 'utf8'));
             } catch {
               state = {
-                v: 1,
-                preferences: ["habs","cola","harris","chestnut","lycee","wcs","dulwich","cls"],
+                v: 3,
+                shortlist: ["habs","globe","oasis","cola","harris","chestnut","lycee","lycee_brit","wcs","dulwich","cls"],
+                preferences: [],
                 checklist: {},
+                comments: [],
                 updatedAt: null,
                 updatedBy: "github-action"
               };
             }
+            state.comments = normalizeComments(state.comments);
 
             const endpoint = cfg.endpoint || 'https://jsonblob.com/api/jsonBlob';
             let blobId = cfg.blobId;
             let ok = false;
 
-            // Try read existing remote (prefer fresher remote if present)
+            // Try read existing remote (merge; never drop comments)
             if (blobId) {
               try {
                 const getRes = await fetch(`${endpoint}/${blobId}`, {
@@ -53,10 +85,7 @@ jobs:
                 });
                 if (getRes.ok) {
                   const remote = await getRes.json();
-                  if (remote && remote.updatedAt && (!state.updatedAt || remote.updatedAt > state.updatedAt)) {
-                    state = remote;
-                  }
-                  // Touch / rewrite to refresh activity
+                  state = mergeState(state, remote);
                   const putRes = await fetch(`${endpoint}/${blobId}`, {
                     method: 'PUT',
                     headers: {
@@ -84,7 +113,6 @@ jobs:
               if (!postRes.ok) {
                 throw new Error('Failed to create blob: ' + postRes.status);
               }
-              // Location: /api/jsonBlob/<id>
               const loc = postRes.headers.get('Location') || postRes.headers.get('location') || '';
               const xid = postRes.headers.get('X-jsonblob-id') || postRes.headers.get('x-jsonblob-id');
               blobId = xid || loc.split('/').filter(Boolean).pop();
@@ -93,12 +121,16 @@ jobs:
               console.log('Created new blob', blobId);
             }
 
+            // Ensure comments always array in backup
+            state.comments = normalizeComments(state.comments);
+
             fs.writeFileSync('sync-config.json', JSON.stringify({
               blobId,
               endpoint
             }, null, 2) + '\n');
             fs.writeFileSync('state.json', JSON.stringify(state, null, 2) + '\n');
             core.setOutput('blobId', blobId);
+            core.setOutput('commentCount', String((state.comments || []).length));
 
       - name: Commit backup if changed
         run: |
