@@ -1,20 +1,39 @@
 {
-  "comments": null,
-  "checklist": {},
-  "v": 2,
-  "updatedBy": "ui-restructure",
-  "updatedAt": "2026-07-21T11:20:08.5016153Z",
+  "updatedAt": "2026-07-21T14:52:27.0927962Z",
+  "comments": {
+    "id": "cm-1784644965178-ufwm",
+    "text": "test",
+    "name": "",
+    "at": "2026-07-21T14:42:45.178Z",
+    "clientId": "u-sw9m21z"
+  },
   "preferences": [
     "habs",
-    "globe",
-    "oasis",
-    "cola",
-    "harris",
-    "chestnut",
     "lycee",
+    "cola",
+    "oasis",
+    "chestnut",
+    "globe",
+    "harris",
     "lycee_brit",
     "wcs",
     "dulwich",
     "cls"
-  ]
+  ],
+  "checklist": {},
+  "shortlist": [
+    "habs",
+    "lycee",
+    "cola",
+    "oasis",
+    "chestnut",
+    "globe",
+    "harris",
+    "lycee_brit",
+    "wcs",
+    "dulwich",
+    "cls"
+  ],
+  "v": 3,
+  "updatedBy": "feature-update"
 }
