@@ -1,16 +1,19 @@
 {
-  "updatedBy": "bootstrap",
-  "updatedAt": "2026-07-21T09:50:32.0950336Z",
   "v": 1,
   "preferences": [
     "habs",
+    "globe",
+    "oasis",
     "cola",
     "harris",
     "chestnut",
     "lycee",
+    "lycee_brit",
     "wcs",
     "dulwich",
     "cls"
   ],
-  "checklist": {}
+  "checklist": {},
+  "updatedAt": "2026-07-21T12:30:00.000Z",
+  "updatedBy": "content-update"
 }

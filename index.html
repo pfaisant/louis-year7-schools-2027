@@ -80,6 +80,9 @@
     .bar.prep>i{background:linear-gradient(90deg,var(--amber),#f59e0b)}
     .bar.prep.high>i{background:linear-gradient(90deg,var(--rose),#f43f5e)}
     .commute-long{color:var(--scarlet)!important;font-weight:700;background:var(--scarlet-bg);padding:.12rem .35rem;border-radius:4px;display:inline-block}
+    .fees{font-weight:700;padding:.12rem .35rem;border-radius:4px;display:inline-block}
+    .fees-free{color:var(--green);background:var(--green-bg)}
+    .fees-scale{font-weight:700}
     .pref-cell{display:flex;align-items:center;gap:.3rem;min-width:4.2rem}
     .pref-num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.95rem;color:var(--navy);width:1.4rem;text-align:center}
     .pref-arrows{display:flex;flex-direction:column;gap:1px}
@@ -143,7 +146,7 @@
       <p>SE17 1BS · Multi-user live sync · Entry Sept 2027</p>
     </div>
     <div class="nav-group">Overview</div>
-    <button type="button" class="nav-btn active" data-tab="overview"><span class="n">01</span> Dashboard</button>
+    <button type="button" class="nav-btn active" data-tab="overview"><span class="n">01</span> Shortlist</button>
     <button type="button" class="nav-btn" data-tab="compare"><span class="n">02</span> Compare all</button>
     <button type="button" class="nav-btn" data-tab="timeline"><span class="n">03</span> Timeline</button>
     <button type="button" class="nav-btn" data-tab="steps"><span class="n">04</span> Key steps</button>
@@ -151,52 +154,32 @@
     <button type="button" class="nav-btn" data-tab="share"><span class="n">06</span> Save &amp; share</button>
     <div class="nav-group">Schools</div>
     <button type="button" class="nav-btn" data-tab="habs"><span class="n">H</span> Habs Borough</button>
+    <button type="button" class="nav-btn" data-tab="globe"><span class="n">G</span> Ark Globe</button>
+    <button type="button" class="nav-btn" data-tab="oasis"><span class="n">O</span> Oasis South Bank</button>
     <button type="button" class="nav-btn" data-tab="wcs"><span class="n">W</span> Westminster City</button>
     <button type="button" class="nav-btn" data-tab="cola"><span class="n">C</span> COLA Southwark</button>
     <button type="button" class="nav-btn" data-tab="harris"><span class="n">Ha</span> Harris Boys ED</button>
     <button type="button" class="nav-btn" data-tab="chestnut"><span class="n">Ch</span> Chestnut Grove</button>
-    <button type="button" class="nav-btn" data-tab="lycee"><span class="n">L</span> Lycée CdG</button>
+    <button type="button" class="nav-btn" data-tab="lycee"><span class="n">L</span> CdG French/SI</button>
+    <button type="button" class="nav-btn" data-tab="lycee_brit"><span class="n">B</span> CdG British</button>
     <button type="button" class="nav-btn" data-tab="dulwich"><span class="n">D</span> Dulwich College</button>
     <button type="button" class="nav-btn" data-tab="cls"><span class="n">CL</span> City of London</button>
-    <div class="side-foot">
-      Preference + checklist sync for everyone on this public link.<br>
-      Commute &gt; 40′ highlighted in <span style="color:#ff6b8a">scarlet</span>.
-    </div>
+    <div class="side-foot">SE17 1BS · Sept 2027 entry</div>
   </aside>
 
   <main class="main">
     <section id="overview" class="panel active">
-      <div class="strip">
-        <div>
-          <h2>Dashboard · SE17 1BS</h2>
-          <p class="sub">Default sort = family preference · click headers to re-sort · arrows reorder for everyone</p>
-        </div>
-        <div class="chips">
-          <span class="chip louis">Louis: piano · football · EN · FR · DE</span>
-          <span class="chip live" id="sync-chip">Sync: connecting…</span>
-          <span class="chip" id="sync-meta">—</span>
-        </div>
-      </div>
-
-      <div class="callout info">
-        <strong>Live multi-user:</strong> ranking and checklist are shared. Anyone with this page URL can edit; changes appear for others within a few seconds.
-        Commute times over <strong>40 minutes</strong> show in <span style="color:var(--scarlet);font-weight:700">scarlet</span>.
-      </div>
-
-      <div class="grid-4" style="margin-bottom:.65rem">
-        <div class="card"><div class="stat-n">8</div><div class="stat-l">Shortlisted</div></div>
-        <div class="card"><div class="stat-n" id="long-commute-count">—</div><div class="stat-l">Commute &gt; 40′</div></div>
-        <div class="card"><div class="stat-n">11 Sep</div><div class="stat-l">First deadline</div></div>
-        <div class="card"><div class="stat-n" id="checklist-progress">0/14</div><div class="stat-l">Checklist done</div></div>
-      </div>
-
       <div class="toolbar">
-        <strong>Sort:</strong> <span id="sort-label">Preference order</span>
         <button type="button" class="btn btn-ghost" id="btn-sort-pref">Preference</button>
         <button type="button" class="btn btn-ghost" id="btn-sort-quality">Quality ↓</button>
-        <button type="button" class="btn btn-ghost" id="btn-reset-pref">Reset pref 1–8</button>
-        <button type="button" class="btn btn-ghost" id="btn-force-sync">Force sync</button>
-        <span class="save-status" id="pref-status"></span>
+        <button type="button" class="btn btn-ghost" id="btn-reset-pref">Reset pref</button>
+        <button type="button" class="btn btn-ghost" id="btn-force-sync">Sync</button>
+        <span class="save-status" id="pref-status" hidden></span>
+        <span id="sync-chip" hidden></span>
+        <span id="sync-meta" hidden></span>
+        <span id="sort-label" hidden>Preference order</span>
+        <span id="checklist-progress" hidden>0/14</span>
+        <span id="long-commute-count" hidden>—</span>
       </div>
 
       <div class="table-wrap">
@@ -253,14 +236,17 @@
       <div class="table-wrap"><table>
         <thead><tr><th>School</th><th>Admission / tests</th><th>Scholarships</th><th>Open days</th><th>Deadlines</th><th>Fees</th><th>Links</th></tr></thead>
         <tbody>
-          <tr><td class="school"><span class="badge b-state">State</span><br>Habs Borough</td><td>CAF + LA banding</td><td>—</td><td>1 Oct eve; tours Sep/Oct</td><td>CAF 31 Oct</td><td>Free</td><td><a href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">eAdmissions</a></td></tr>
-          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><br>Westminster City</td><td>CAF + SIF · banding 14 Nov · Eng/Maths day · faith categories</td><td>—</td><td>Sep/Oct am + 6 Oct eve</td><td>31 Oct</td><td>Free</td><td><a href="https://www.wcsch.com/744/apply-year-7" target="_blank" rel="noopener">SIF</a></td></tr>
-          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-ok">No banding</span><br>COLA Southwark</td><td>CAF · optional IT aptitude (10%/24)</td><td>—</td><td>24 &amp; 28–30 Sep</td><td>31 Oct</td><td>Free</td><td><a href="https://docs.google.com/forms/d/e/1FAIpQLSdkmmPcoGAgp96NkwOeHwPzXqVSKGLEiArMbY81rJFYvLG40Q/viewform" target="_blank" rel="noopener">IT form</a></td></tr>
-          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><span class="badge b-ok">No banding</span><br>Harris Boys ED</td><td>CAF · distance only</td><td>Post-offer: Maths, Music, Future Linguist, CS, English, Geog, History, Science</td><td>Sep/Oct</td><td>31 Oct</td><td>Free</td><td><a href="https://www.harrisdulwichboys.org.uk/harris-scholarship-programmes" target="_blank" rel="noopener">Scholarships</a></td></tr>
-          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-warn">Early</span><br>Chestnut Grove</td><td>Wandsworth Test · MFL/Art specialist 19 Sep</td><td>Specialist places</td><td>TBC</td><td>Specialist form 11 Sep midday</td><td>Free</td><td><a href="https://forms.office.com/Pages/ResponsePage.aspx?id=2lpYW59c_ECe6BE-MtwiStZckjfs9pxIpLFkLm7_n9NUMEpHTFMwWDBWSjRaTldMTklUQlozVEIxWC4u" target="_blank" rel="noopener">Specialist form</a></td></tr>
-          <tr><td class="school"><span class="badge b-fr">French</span><span class="badge b-intl">Intl</span><br>Lycée CdG</td><td>FR dossier · SI–BFI · British Section separate</td><td>Bourses</td><td>Mar (passed)</td><td>From 7 Oct</td><td class="mono">£12.6k–£21.5k</td><td><a href="https://www.lyceefrancais.org.uk/en/admissions/" target="_blank" rel="noopener">Admissions</a> · <a href="https://www.lyceefrancais.org.uk/sinscrire/cursus-britannique/" target="_blank" rel="noopener">British</a></td></tr>
-          <tr><td class="school"><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><br>Dulwich College</td><td>11+ 4 Dec · interview</td><td>Academic · Music (to ⅓) · Sport · bursaries</td><td>10 Oct</td><td>Reg 2 Nov midday</td><td class="mono">£31,986</td><td><a href="https://www.dulwich.org.uk/admissions/year-7-entry" target="_blank" rel="noopener">Y7</a></td></tr>
-          <tr><td class="school"><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><br>City of London School</td><td>Online + writing 27 Nov · interview</td><td>£35 prizes · bursaries to 100%</td><td>22 &amp; 24 Sep</td><td>Reg 2 Nov</td><td class="mono">£29,545</td><td><a href="https://www.cityoflondonschool.org.uk/11-entry-registration-form/" target="_blank" rel="noopener">Register</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><br>Habs Borough</td><td>CAF + LA banding</td><td>—</td><td>1 Oct eve; tours Sep/Oct</td><td>CAF 31 Oct</td><td><span class="fees fees-free mono">Free</span></td><td><a href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">eAdmissions</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><br>Ark Globe</td><td>CAF · banding TBC</td><td>—</td><td>See school</td><td>31 Oct</td><td><span class="fees fees-free mono">Free</span></td><td><a href="https://arkglobe.org/" target="_blank" rel="noopener">arkglobe.org</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><br>Oasis South Bank</td><td>CAF + SIF</td><td>—</td><td>See school</td><td>31 Oct</td><td><span class="fees fees-free mono">Free</span></td><td><a href="https://www.oasisacademysouthbank.org/" target="_blank" rel="noopener">Site</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><br>Westminster City</td><td>CAF + SIF · banding 14 Nov · Eng/Maths day · faith categories</td><td>—</td><td>Sep/Oct am + 6 Oct eve</td><td>31 Oct</td><td><span class="fees fees-free mono">Free</span></td><td><a href="https://www.wcsch.com/744/apply-year-7" target="_blank" rel="noopener">SIF</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-ok">No banding</span><br>COLA Southwark</td><td>CAF · optional IT aptitude (10%/24)</td><td>—</td><td>24 &amp; 28–30 Sep</td><td>31 Oct</td><td><span class="fees fees-free mono">Free</span></td><td><a href="https://docs.google.com/forms/d/e/1FAIpQLSdkmmPcoGAgp96NkwOeHwPzXqVSKGLEiArMbY81rJFYvLG40Q/viewform" target="_blank" rel="noopener">IT form</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><span class="badge b-ok">No banding</span><br>Harris Boys ED</td><td>CAF · distance only</td><td>Post-offer: Maths, Music, Future Linguist, CS, English, Geog, History, Science</td><td>Sep/Oct</td><td>31 Oct</td><td><span class="fees fees-free mono">Free</span></td><td><a href="https://www.harrisdulwichboys.org.uk/harris-scholarship-programmes" target="_blank" rel="noopener">Scholarships</a></td></tr>
+          <tr><td class="school"><span class="badge b-state">State</span><span class="badge b-warn">Early</span><br>Chestnut Grove</td><td>Wandsworth Test · MFL/Art specialist 19 Sep</td><td>Specialist places</td><td>TBC</td><td>Specialist form 11 Sep midday</td><td><span class="fees fees-free mono">Free</span></td><td><a href="https://forms.office.com/Pages/ResponsePage.aspx?id=2lpYW59c_ECe6BE-MtwiStZckjfs9pxIpLFkLm7_n9NUMEpHTFMwWDBWSjRaTldMTklUQlozVEIxWC4u" target="_blank" rel="noopener">Specialist form</a></td></tr>
+          <tr><td class="school"><span class="badge b-fr">French</span><span class="badge b-intl">SI–BFI</span><br>CdG French / SI–BFI</td><td>Dossier · no entrance exam (SI language assess possible)</td><td>Bourses</td><td>Mar (passed)</td><td>From 7 Oct</td><td><span class="fees fees-scale mono" style="color:rgb(210,120,30);font-weight:700">£12,557</span> <span class="mono" style="color:var(--mute)">(SI–BFI £12,868)</span></td><td><a href="https://www.lyceefrancais.org.uk/sinscrire/cursus-francais/" target="_blank" rel="noopener">French</a></td></tr>
+          <tr><td class="school"><span class="badge b-fr">French</span><span class="badge b-intl">British</span><br>CdG British Section</td><td>British Section admissions (GCSE/A-level + FR)</td><td>Bourses</td><td>Mar (passed)</td><td>See British track</td><td><span class="fees fees-scale mono" style="color:rgb(230,50,20);font-weight:700">£21,542</span></td><td><a href="https://www.lyceefrancais.org.uk/sinscrire/cursus-britannique/" target="_blank" rel="noopener">British</a></td></tr>
+          <tr><td class="school"><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><br>Dulwich College</td><td>11+ 4 Dec · interview</td><td>Academic · Music (to ⅓) · Sport · bursaries</td><td>10 Oct</td><td>Reg 2 Nov midday</td><td><span class="fees fees-scale mono" style="color:rgb(255,0,30);font-weight:700">£31,986</span></td><td><a href="https://www.dulwich.org.uk/admissions/year-7-entry" target="_blank" rel="noopener">Y7</a></td></tr>
+          <tr><td class="school"><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><br>City of London School</td><td>Online + writing 27 Nov · interview</td><td>£35 prizes · bursaries to 100%</td><td>22 &amp; 24 Sep</td><td>Reg 2 Nov</td><td><span class="fees fees-scale mono" style="color:rgb(245,20,30);font-weight:700">£29,545</span></td><td><a href="https://www.cityoflondonschool.org.uk/11-entry-registration-form/" target="_blank" rel="noopener">Register</a></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -306,8 +292,7 @@
     <section id="share" class="panel">
       <div class="strip"><div><h2>Save &amp; share</h2><p class="sub">Public multi-user link · GitHub Pages</p></div></div>
       <div class="callout ok">
-        <strong>Multi-user is on by default.</strong> Preference ranking and checklist are stored in a shared cloud blob (JSONBlob), with GitHub <code>state.json</code> backup via Actions keep-alive every 8 hours.
-        Anyone with the public site URL can edit — no login.
+        Shared ranking + checklist (no login). Backup: <code>state.json</code> + keep-alive Action.
       </div>
       <div class="grid-2">
         <div class="card">
@@ -350,7 +335,11 @@
 
     <!-- compact school tabs -->
     <section id="habs" class="panel"><div class="school-head"><div><h2>Haberdashers' Borough Academy</h2><span class="badge b-state">State</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">0.8 mi · <strong>18′</strong></p></div><div class="metrics"><div class="metric"><div class="v">78</div><div class="l">Q</div></div><div class="metric"><div class="v">72</div><div class="l">Admit</div></div><div class="metric"><div class="v">25</div><div class="l">Prep</div></div></div></div>
-      <div class="card"><h3>Admission</h3><p>CAF + LA banding. Free.</p><div class="btn-row"><a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">eAdmissions</a></div></div></section>
+      <div class="card"><h3>Admission</h3><p>CAF + LA banding. <span class="fees fees-free mono">Free</span></p><div class="btn-row"><a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">eAdmissions</a></div></div></section>
+    <section id="globe" class="panel"><div class="school-head"><div><h2>Ark Globe Academy</h2><span class="badge b-state">State</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">1.0 mi · <strong>15′</strong></p></div><div class="metrics"><div class="metric"><div class="v">72</div><div class="l">Q</div></div><div class="metric"><div class="v">70</div><div class="l">Admit</div></div><div class="metric"><div class="v">20</div><div class="l">Prep</div></div></div></div>
+      <div class="card"><h3>Admission</h3><p>CAF. All-through academy near SE17. <span class="fees fees-free mono">Free</span></p><div class="btn-row"><a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a><a class="btn btn-ghost" href="https://arkglobe.org/" target="_blank" rel="noopener">Site</a></div></div></section>
+    <section id="oasis" class="panel"><div class="school-head"><div><h2>Oasis Academy South Bank</h2><span class="badge b-state">State</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">SE1 7HS · 2.2 mi · <strong>25′</strong></p></div><div class="metrics"><div class="metric"><div class="v">75</div><div class="l">Q</div></div><div class="metric"><div class="v">62</div><div class="l">Admit</div></div><div class="metric"><div class="v">22</div><div class="l">Prep</div></div></div></div>
+      <div class="card"><h3>Admission</h3><p>CAF + school SIF. Waterloo / Westminster Bridge Rd. <span class="fees fees-free mono">Free</span></p><div class="btn-row"><a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a><a class="btn btn-ghost" href="https://www.oasisacademysouthbank.org/admissions/how-to-apply/our-admissions-arrangements" target="_blank" rel="noopener">Admissions</a></div></div></section>
     <section id="wcs" class="panel"><div class="school-head"><div><h2>Westminster City School</h2><span class="badge b-state">State</span><span class="badge b-boys">Boys</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">2.8 mi · <strong>30′</strong></p></div><div class="metrics"><div class="metric"><div class="v">76</div><div class="l">Q</div></div><div class="metric"><div class="v">45</div><div class="l">Admit</div></div><div class="metric"><div class="v">40</div><div class="l">Prep</div></div></div></div>
       <div class="card"><h3>Admission</h3><p>CAF + SIF · banding 14 Nov · faith categories.</p><div class="btn-row"><a class="btn btn-primary" href="https://www.wcsch.com/744/apply-year-7" target="_blank" rel="noopener">SIF</a></div></div></section>
     <section id="cola" class="panel"><div class="school-head"><div><h2>COLA Southwark</h2><span class="badge b-state">State</span><span class="badge b-ok">No banding</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">1.5 mi · <strong>20′</strong></p></div><div class="metrics"><div class="metric"><div class="v">74</div><div class="l">Q</div></div><div class="metric"><div class="v">76</div><div class="l">Admit</div></div><div class="metric"><div class="v">20</div><div class="l">Prep</div></div></div></div>
@@ -362,16 +351,23 @@
     <section id="chestnut" class="panel"><div class="school-head"><div><h2>Chestnut Grove Academy</h2><span class="badge b-state">State</span><span class="badge b-warn">Early</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">5.5 mi · <span class="commute-long">45′</span></p></div><div class="metrics"><div class="metric"><div class="v">80</div><div class="l">Q</div></div><div class="metric"><div class="v">70</div><div class="l">Admit</div></div><div class="metric"><div class="v">45</div><div class="l">Prep</div></div></div></div>
       <div class="callout warn">Specialist form <strong>11 Sep midday</strong> · tests 19 Sep. MFL strong for FR/DE.</div>
       <div class="card"><div class="btn-row"><a class="btn btn-warn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=2lpYW59c_ECe6BE-MtwiStZckjfs9pxIpLFkLm7_n9NUMEpHTFMwWDBWSjRaTldMTklUQlozVEIxWC4u" target="_blank" rel="noopener">Specialist form</a></div></div></section>
-    <section id="lycee" class="panel"><div class="school-head"><div><h2>Lycée Français Charles de Gaulle</h2><span class="badge b-fr">French</span><span class="badge b-intl">Intl options</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">4.5 mi · <strong>40′</strong> (borderline)</p></div><div class="metrics"><div class="metric"><div class="v">86</div><div class="l">Q</div></div><div class="metric"><div class="v">68</div><div class="l">Admit</div></div><div class="metric"><div class="v">35</div><div class="l">Prep</div></div></div></div>
-      <div class="grid-3">
-        <div class="card"><h3>French 6ème</h3><p>Dossier, no exam. <span class="mono">£12,556.80/yr</span></p></div>
-        <div class="card"><h3>SI–BFI international</h3><p>International section. <span class="mono">£12,867.60/yr</span></p></div>
-        <div class="card"><h3>British Section</h3><p>GCSE/A-level track. <span class="mono">£21,542.40/yr</span></p></div>
+    <section id="lycee" class="panel"><div class="school-head"><div><h2>CdG · French / SI–BFI</h2><span class="badge b-fr">French</span><span class="badge b-intl">SI–BFI</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">4.5 mi · <strong>40′</strong></p></div><div class="metrics"><div class="metric"><div class="v">86</div><div class="l">Q</div></div><div class="metric"><div class="v">68</div><div class="l">Admit</div></div><div class="metric"><div class="v">35</div><div class="l">Prep</div></div></div></div>
+      <div class="grid-2">
+        <div class="card"><h3>French secondary</h3><p>Dossier, no exam. <span class="fees fees-scale mono" style="color:rgb(210,120,30)">£12,557/yr</span></p></div>
+        <div class="card"><h3>SI–BFI</h3><p>International section. <span class="fees fees-scale mono" style="color:rgb(215,110,28)">£12,868/yr</span></p></div>
       </div>
       <div class="btn-row" style="margin-top:.65rem">
-        <a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/en/admissions/" target="_blank" rel="noopener">Admissions</a>
-        <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/sinscrire/cursus-britannique/" target="_blank" rel="noopener">British curriculum</a>
+        <a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/sinscrire/cursus-francais/" target="_blank" rel="noopener">French curriculum</a>
         <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/assets/Uploads/Tarifs-2026-2027.pdf" target="_blank" rel="noopener">Fees PDF</a>
+      </div>
+    </section>
+    <section id="lycee_brit" class="panel"><div class="school-head"><div><h2>CdG · British Section</h2><span class="badge b-fr">French campus</span><span class="badge b-intl">British</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">4.5 mi · <strong>40′</strong> · higher fee track</p></div><div class="metrics"><div class="metric"><div class="v">86</div><div class="l">Q</div></div><div class="metric"><div class="v">55</div><div class="l">Admit</div></div><div class="metric"><div class="v">40</div><div class="l">Prep</div></div></div></div>
+      <div class="card"><h3>Fees 2026–27</h3><p>GCSE/A-level path with compulsory French. <span class="fees fees-scale mono" style="color:rgb(230,40,20)">£21,542/yr</span> (+ £1,800 registration). Separate from French 6ème dossier route.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/sinscrire/cursus-britannique/" target="_blank" rel="noopener">British curriculum</a>
+          <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/apprendre/section-britannique/" target="_blank" rel="noopener">British Section</a>
+          <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/assets/Uploads/Tarifs-2026-2027.pdf" target="_blank" rel="noopener">Fees PDF</a>
+        </div>
       </div>
     </section>
     <section id="dulwich" class="panel"><div class="school-head"><div><h2>Dulwich College</h2><span class="badge b-ind">Indep</span><span class="badge b-boys">Boys</span><p class="sub" style="color:var(--mute);font-size:.78rem;margin-top:.3rem">3.8 mi · <strong>38′</strong></p></div><div class="metrics"><div class="metric"><div class="v">94</div><div class="l">Q</div></div><div class="metric"><div class="v">32</div><div class="l">Admit</div></div><div class="metric"><div class="v">88</div><div class="l">Prep</div></div></div></div>
@@ -384,7 +380,7 @@
 <script>
 (function () {
   var CLIENT_ID = "u-" + Math.random().toString(36).slice(2, 9);
-  var DEFAULT_PREF = ["habs","cola","harris","chestnut","lycee","wcs","dulwich","cls"];
+  var DEFAULT_PREF = ["habs","globe","oasis","cola","harris","chestnut","lycee","lycee_brit","wcs","dulwich","cls"];
   var prefOrder = DEFAULT_PREF.slice();
   var checklist = {};
   var remoteUpdatedAt = null;
@@ -392,10 +388,15 @@
   var pollTimer = null;
   var applyingRemote = false;
   var syncCfg = { blobId: null, endpoint: "https://jsonblob.com/api/jsonBlob" };
+  var FEE_MAX = 32000;
 
   var SCHOOLS = [
     {id:"habs",name:"Haberdashers' Borough Academy",short:"SE1 · co-ed · banding",tests:"CAF + LA banding (fair bands)",quality:78,admit:72,prep:25,dist:0.8,commute:18,fees:0,feesLabel:"Free",
       apply:'<a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a>',badges:"state"},
+    {id:"globe",name:"Ark Globe Academy",short:"SE1 · co-ed all-through",tests:"CAF · check current banding",quality:72,admit:70,prep:20,dist:1.0,commute:15,fees:0,feesLabel:"Free",
+      apply:'<a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a> <a class="btn btn-ghost" href="https://arkglobe.org/" target="_blank" rel="noopener">Site</a>',badges:"state"},
+    {id:"oasis",name:"Oasis Academy South Bank",short:"SE1 7HS · co-ed · Waterloo",tests:"CAF + school SIF (check academy site)",quality:75,admit:62,prep:22,dist:2.2,commute:25,fees:0,feesLabel:"Free",
+      apply:'<a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a> <a class="btn btn-ghost" href="https://www.oasisacademysouthbank.org/admissions/how-to-apply/our-admissions-arrangements" target="_blank" rel="noopener">Admissions</a>',badges:"state"},
     {id:"cola",name:"City of London Academy Southwark",short:"SE1 · no banding · optional IT",tests:"CAF only · optional IT aptitude (10%/24 places)",quality:74,admit:76,prep:20,dist:1.5,commute:20,fees:0,feesLabel:"Free",
       apply:'<a class="btn btn-primary" href="https://www.eadmissions.org.uk" target="_blank" rel="noopener">CAF</a> <a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdkmmPcoGAgp96NkwOeHwPzXqVSKGLEiArMbY81rJFYvLG40Q/viewform" target="_blank" rel="noopener">IT form</a>',badges:"state"},
     {id:"harris",name:"Harris Boys' Academy East Dulwich",short:"SE22 · boys · distance · Outstanding",tests:"CAF · no test · distance (PAN 150)",quality:88,admit:58,prep:15,dist:3.2,commute:35,fees:0,feesLabel:"Free",
@@ -404,8 +405,10 @@
       apply:'<a class="btn btn-primary" href="https://www.wcsch.com/744/apply-year-7" target="_blank" rel="noopener">SIF</a>',badges:"state boys"},
     {id:"chestnut",name:"Chestnut Grove Academy",short:"SW12 · Wandsworth + MFL/Art",tests:"Wandsworth Test · MFL/Art specialist 19 Sep",quality:80,admit:70,prep:45,dist:5.5,commute:45,fees:0,feesLabel:"Free",
       apply:'<a class="btn btn-warn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=2lpYW59c_ECe6BE-MtwiStZckjfs9pxIpLFkLm7_n9NUMEpHTFMwWDBWSjRaTldMTklUQlozVEIxWC4u" target="_blank" rel="noopener">Specialist</a>',badges:"state warn"},
-    {id:"lycee",name:"Lycée Français Charles de Gaulle",short:"SW7 · FR / SI–BFI / British Section",tests:"Dossier (FR) · SI language assess · British Section separate",quality:86,admit:68,prep:35,dist:4.5,commute:40,fees:12557,feesLabel:"£12.6k–£21.5k",
-      apply:'<a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/en/admissions/" target="_blank" rel="noopener">Admissions</a>',badges:"fr intl"},
+    {id:"lycee",name:"CdG · French / SI–BFI",short:"SW7 · French curriculum (+ intl SI–BFI)",tests:"Dossier (no exam) · SI may include language assess",quality:86,admit:68,prep:35,dist:4.5,commute:40,fees:12557,feesLabel:"£12,557",
+      apply:'<a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/sinscrire/cursus-francais/" target="_blank" rel="noopener">French</a> <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/assets/Uploads/Tarifs-2026-2027.pdf" target="_blank" rel="noopener">Fees</a>',badges:"fr intl"},
+    {id:"lycee_brit",name:"CdG · British Section",short:"SW7 · GCSE/A-level track · higher fees",tests:"British Section admissions (separate from French 6ème)",quality:86,admit:55,prep:40,dist:4.5,commute:40,fees:21542,feesLabel:"£21,542",
+      apply:'<a class="btn btn-primary" href="https://www.lyceefrancais.org.uk/sinscrire/cursus-britannique/" target="_blank" rel="noopener">British</a> <a class="btn btn-ghost" href="https://www.lyceefrancais.org.uk/assets/Uploads/Tarifs-2026-2027.pdf" target="_blank" rel="noopener">Fees</a>',badges:"fr intl"},
     {id:"dulwich",name:"Dulwich College",short:"SE21 · boys · selective 11+",tests:"11+ Maths/Eng/Reasoning 4 Dec · interview",quality:94,admit:32,prep:88,dist:3.8,commute:38,fees:31986,feesLabel:"£31,986",
       apply:'<a class="btn btn-primary" href="https://www.dulwich.org.uk/admissions/year-7-entry" target="_blank" rel="noopener">Register</a>',badges:"ind boys"},
     {id:"cls",name:"City of London School",short:"EC4 · boys · selective 11+",tests:"Online 105′ + writing 30′ on 27 Nov · interview",quality:96,admit:28,prep:90,dist:2.5,commute:30,fees:29545,feesLabel:"£29,545",
@@ -415,12 +418,11 @@
   /* Alternatives: co-ed or boys only — no girls' schools */
   var ALTS = [
     {id:"charter",name:"The Charter School East Dulwich",short:"SE22 · co-ed academy",why:"Strong local comprehensive; Harris ED peer",tests:"CAF · no 11+",quality:82,admit:55,prep:15,dist:3.0,commute:32,fees:0,feesLabel:"Free",notes:"Proximity backup if Harris distance tight"},
-    {id:"globe",name:"Ark Globe Academy",short:"SE1 · co-ed all-through",why:"Very close to SE17; all-through option",tests:"CAF · check current banding",quality:72,admit:70,prep:20,dist:1.0,commute:15,fees:0,feesLabel:"Free",notes:"Commute win if Habs/COLA risk"},
     {id:"alleyns",name:"Alleyn's School",short:"SE22 · co-ed independent",why:"Dulwich triangle co-ed alternative to DC/CLS",tests:"11+ exams · scholarships",quality:93,admit:30,prep:88,dist:3.5,commute:35,fees:30000,feesLabel:"~£30k+",notes:"Similar prep; co-ed culture"},
     {id:"whitgift",name:"Whitgift School",short:"Croydon · boys independent",why:"Strong sport/music scholarships",tests:"11+ · scholarships",quality:90,admit:28,prep:85,dist:8.5,commute:55,fees:28000,feesLabel:"~£28–32k",notes:"Football/piano angle; long commute"},
     {id:"trinity",name:"Trinity School Croydon",short:"Croydon · boys independent",why:"Academic boys indep with sport",tests:"11+ · scholarships",quality:89,admit:30,prep:85,dist:8.0,commute:52,fees:27000,feesLabel:"~£27–30k",notes:"Stretch option; long commute"},
     {id:"ejm",name:"École Jeannine Manuel London",short:"Bilingual FR/EN",why:"Bilingual alternative to CdG",tests:"Assessment · dossier",quality:88,admit:40,prep:50,dist:5.0,commute:42,fees:25000,feesLabel:"~£20–30k",notes:"Bilingual without full AEFE French track"},
-    {id:"wil",name:"Lycée International Winston Churchill",short:"Wembley · AEFE",why:"Other London AEFE option",tests:"Dossier / track tests",quality:84,admit:50,prep:40,dist:10.0,commute:60,fees:15000,feesLabel:"See fees",notes:"Longer than South Ken CdG"},
+    {id:"wil",name:"Lycée International Winston Churchill",short:"Wembley · AEFE",why:"Other London AEFE option",tests:"Dossier / track tests",quality:84,admit:50,prep:40,dist:10.0,commute:60,fees:15000,feesLabel:"~£15k",notes:"Longer than South Ken CdG"},
     {id:"wilsons",name:"Wilson's School (Sutton)",short:"Boys grammar",why:"Selective state stretch",tests:"SET / selective 11+",quality:95,admit:18,prep:92,dist:9.5,commute:58,fees:0,feesLabel:"Free",notes:"High prep; long from SE17"},
     {id:"kcs",name:"King's College School Wimbledon",short:"Boys independent",why:"Top-tier independent stretch",tests:"11+ highly selective",quality:97,admit:15,prep:95,dist:7.5,commute:52,fees:32000,feesLabel:"~£32k+",notes:"Only if full 11+ circuit"}
   ];
@@ -446,17 +448,55 @@
   var altSort = { key: "quality", dir: "desc", type: "num" };
 
   function setSyncUI(kind, text, meta) {
-    var chip = document.getElementById("sync-chip");
-    chip.className = "chip live" + (kind === "ok" ? "" : kind === "warn" ? " warn" : kind === "err" ? " err" : "");
-    chip.textContent = text;
-    document.getElementById("sync-meta").textContent = meta || "";
-    document.getElementById("share-sync-detail").textContent = text + (meta ? " · " + meta : "");
+    var detail = document.getElementById("share-sync-detail");
+    if (detail) detail.textContent = (text || "") + (meta ? " · " + meta : "");
   }
 
   function commuteHtml(mins) {
     var label = mins + "′";
     if (mins > 40) return '<span class="commute-long mono">' + label + "</span>";
     return '<span class="mono"><strong>' + label + "</strong></span>";
+  }
+
+  /** Green (free/low) → amber → red (high). Fees always emphasize cost in red scale. */
+  function feesHtml(fees, label) {
+    if (!fees || fees <= 0) {
+      return '<span class="fees fees-free mono">Free</span>';
+    }
+    var t = Math.max(0, Math.min(1, fees / FEE_MAX));
+    // green (0) → yellow (0.45) → scarlet red (1)
+    var r, g, b;
+    if (t < 0.45) {
+      var u = t / 0.45;
+      r = Math.round(22 + u * (200 - 22));
+      g = Math.round(163 + u * (140 - 163));
+      b = Math.round(74 + u * (20 - 74));
+    } else {
+      var u2 = (t - 0.45) / 0.55;
+      r = Math.round(200 + u2 * (255 - 200));
+      g = Math.round(140 * (1 - u2));
+      b = Math.round(20 * (1 - u2));
+    }
+    return '<span class="fees fees-scale mono" style="color:rgb(' + r + "," + g + "," + b + ");background:rgba(" + r + "," + g + "," + b + ",0.12)">' + label + "</span>";
+  }
+
+  function normalizePrefs(prefs) {
+    var order = [];
+    var known = {};
+    SCHOOLS.forEach(function (s) { known[s.id] = true; });
+    if (Array.isArray(prefs)) {
+      prefs.forEach(function (id) {
+        if (known[id] && order.indexOf(id) < 0) order.push(id);
+      });
+    }
+    // legacy: map old combined lycee to french track
+    if (order.indexOf("lycee") < 0 && Array.isArray(prefs) && prefs.indexOf("lycee") >= 0) {
+      /* already handled if id still exists */
+    }
+    SCHOOLS.forEach(function (s) {
+      if (order.indexOf(s.id) < 0) order.push(s.id);
+    });
+    return order;
   }
 
   function scoreCell(val, barClass, highPrep) {
@@ -495,8 +535,8 @@
   function renderDash() {
     var tbody = document.getElementById("dash-body");
     var rows = getSorted(SCHOOLS, sortState, true);
-    var longN = SCHOOLS.filter(function (s) { return s.commute > 40; }).length;
-    document.getElementById("long-commute-count").textContent = String(longN);
+    var longEl = document.getElementById("long-commute-count");
+    if (longEl) longEl.textContent = String(SCHOOLS.filter(function (s) { return s.commute > 40; }).length);
     tbody.innerHTML = rows.map(function (s) {
       var p = prefIndex(s.id) + 1;
       return "<tr data-id=\"" + s.id + "\">" +
@@ -511,7 +551,7 @@
         "<td>" + scoreCell(s.prep,"prep",true) + "</td>" +
         "<td class=\"mono\">" + s.dist + " mi</td>" +
         "<td>" + commuteHtml(s.commute) + "</td>" +
-        "<td class=\"mono\">" + s.feesLabel + "</td>" +
+        "<td>" + feesHtml(s.fees, s.feesLabel) + "</td>" +
         "<td>" + s.apply + "</td></tr>";
     }).join("");
     tbody.querySelectorAll("[data-move]").forEach(function (btn) {
@@ -536,7 +576,7 @@
         "<td>" + scoreCell(s.prep,"prep",true) + "</td>" +
         "<td class=\"mono\">" + s.dist + " mi</td>" +
         "<td>" + commuteHtml(s.commute) + "</td>" +
-        "<td class=\"mono\">" + s.feesLabel + "</td>" +
+        "<td>" + feesHtml(s.fees, s.feesLabel) + "</td>" +
         "<td>" + s.notes + "</td></tr>";
     }).join("");
     updateSortHeaders("#alt-table", altSort);
@@ -603,7 +643,8 @@
 
   function updateCheckProgress() {
     var n = CHECK_ITEMS.filter(function (i) { return checklist[i.id]; }).length;
-    document.getElementById("checklist-progress").textContent = n + "/" + CHECK_ITEMS.length;
+    var pe = document.getElementById("checklist-progress");
+    if (pe) pe.textContent = n + "/" + CHECK_ITEMS.length;
   }
 
   function currentState() {
@@ -619,8 +660,8 @@
   function applyState(state, fromRemote) {
     if (!state) return;
     applyingRemote = true;
-    if (Array.isArray(state.preferences) && state.preferences.length === DEFAULT_PREF.length) {
-      prefOrder = state.preferences.slice();
+    if (Array.isArray(state.preferences)) {
+      prefOrder = normalizePrefs(state.preferences);
     }
     if (state.checklist && typeof state.checklist === "object") {
       checklist = Object.assign({}, state.checklist);
@@ -629,10 +670,7 @@
     renderDash();
     renderChecklist();
     applyingRemote = false;
-    if (fromRemote) {
-      var when = state.updatedAt ? new Date(state.updatedAt).toLocaleString() : "—";
-      setSyncUI("ok", "Sync: live", "Last change " + when + (state.updatedBy === CLIENT_ID ? " (you)" : " (shared)"));
-    }
+    if (fromRemote) setSyncUI("ok", "ok", "");
   }
 
   async function loadConfig() {
@@ -660,14 +698,14 @@
               if (!remoteUpdatedAt || (data.updatedAt && data.updatedAt > remoteUpdatedAt)) {
                 applyState(data, true);
               } else if (data.updatedAt === remoteUpdatedAt) {
-                setSyncUI("ok", "Sync: live", "Up to date");
+                setSyncUI("ok", "", "");
               }
             }
           }
           return true;
         }
       } catch (e) {
-        setSyncUI("warn", "Sync: blob unreachable", e.message);
+        setSyncUI("warn", "blob unreachable", e.message);
       }
     }
     try {
@@ -676,12 +714,12 @@
         var backup = await res2.json();
         if (!remoteUpdatedAt || (backup.updatedAt && backup.updatedAt > remoteUpdatedAt)) {
           applyState(backup, true);
-          setSyncUI("warn", "Sync: using GitHub backup", "Blob offline — edits may not multi-user until repair");
+          setSyncUI("warn", "using backup", "");
         }
         return true;
       }
     } catch (e2) {}
-    setSyncUI("err", "Sync: offline", "Local only until cloud available");
+    setSyncUI("err", "offline", "");
     return false;
   }
 
@@ -690,7 +728,7 @@
     var state = currentState();
     await loadConfig();
     if (!syncCfg.blobId) {
-      setSyncUI("err", "Sync: no blob id", "Check sync-config.json");
+      setSyncUI("err", "no blob", "");
       return;
     }
     try {
@@ -701,12 +739,9 @@
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
       remoteUpdatedAt = state.updatedAt;
-      setSyncUI("ok", "Sync: saved", "Shared with everyone · " + new Date(state.updatedAt).toLocaleTimeString());
-      var st = document.getElementById("pref-status");
-      st.textContent = "Saved for all users";
-      setTimeout(function () { if (st.textContent === "Saved for all users") st.textContent = ""; }, 1500);
+      setSyncUI("ok", "ok", "");
     } catch (e) {
-      setSyncUI("err", "Sync: save failed", e.message);
+      setSyncUI("err", "save failed", e.message);
     }
   }
 
@@ -746,7 +781,7 @@
   document.getElementById("btn-alt-quality").addEventListener("click", function () { setSort("alt", "quality", "num", "desc"); });
   document.getElementById("btn-alt-commute").addEventListener("click", function () { setSort("alt", "commute", "num", "asc"); });
   document.getElementById("btn-reset-pref").addEventListener("click", function () {
-    if (confirm("Reset shared preference order to default for everyone?")) {
+    if (confirm("Reset preference order?")) {
       prefOrder = DEFAULT_PREF.slice();
       sortState = { key: "pref", dir: "asc", type: "num" };
       renderDash();
